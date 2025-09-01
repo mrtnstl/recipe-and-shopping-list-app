@@ -1,0 +1,56 @@
+openapi: 3.0.3
+info:
+  title: Recipes and shopping lists api
+  description: Api for recipes and shopping lists webapp with, among others, authentication, user handling and recipe management functionality
+  version: 0.0.1
+servers:
+  url: http://localhost:5000
+  description: development server
+paths:
+  /login:
+    post:
+      summary: Post login data
+      responses:
+        "200":
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+                items: $ref '#/components/schemas/user-data'
+        "400":
+          description: Cors error, unauthorized request origin
+          content:
+            application/json:
+              schema:
+                type: object
+                items: $ref '#/components/schemas/cors-error'
+
+components:
+  schemas:
+    user-data:
+      type: object
+      properties:
+        id:
+        name:
+        email:
+
+    cors-error:
+      type: object
+      properties:
+        message:
+
+  securitySchemas:
+    authToken:
+      type: jwt
+      in: header
+      name: Authorization
+    refreshToken:
+      type: jwt
+      in: Requestbody
+      name: token
+
+security:
+  authToken: []
+  refreshToken: []
+  cors:
