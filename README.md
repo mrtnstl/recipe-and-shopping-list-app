@@ -1,8 +1,8 @@
 # recipe-and-shopping-list-webapp
 
-A webapplication where users can browse and upload recipes, create shopping lists for their chosen dishes and track their fridges content for more accurate shopping list generation. (in progress...)
+A webapplication where users can browse and upload recipes, create shopping lists for their chosen dishes and track their fridges content for more accurate shopping list generation.
 
-## Use Cases
+## Use Cases / user stories
 
 - As a visitor, i want to browse between recipes and users
 - As a visitor, i want to create a shopping list for the recipe i selected
@@ -30,15 +30,9 @@ A webapplication where users can browse and upload recipes, create shopping list
 
 More details about the stack below...
 
-### Frontend
-
-
-
 ### Backend
 
-#### Routes
-
-[detailed API docs link placeholder](broken.link-for.now "Detailed API docs")
+[API documentation in progress](https://github.com/mrtnstl/recipe-and-shopping-list-app/blob/main/docs/api_documentation.yaml "API documentation")
 
 #### Middleware
 
@@ -93,7 +87,18 @@ Entity Relationship Diagram
 
 ![ERD v1](https://github.com/mrtnstl/recipe-and-shopping-list-app/blob/main/docs/entity-relationship-diagram_v1.png "ERD v1")
 
+## UI / UX
 
+### Moodboard
 
+![Moodboard](https://github.com/mrtnstl/recipe-and-shopping-list-app/blob/main/docs/recipe_app_moodboard.png "Moodboard")
 
+### Concept sketches
 
+Dark theme
+
+![Dark UI](https://github.com/mrtnstl/recipe-and-shopping-list-app/blob/main/docs/ui_sketch_dark.png "Dark UI")
+
+Light theme
+
+![Light UI](https://github.com/mrtnstl/recipe-and-shopping-list-app/blob/main/docs/ui_sketch_light.png "Light UI")
