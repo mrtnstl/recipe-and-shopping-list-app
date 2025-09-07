@@ -22,12 +22,16 @@ const Users = {
             )
         })
     },
-    find: () => {
-
+    findById: (userId) => {
+        return new Promise((resolve, reject) => {
+            resolve(
+                users.find(u => u.id === userId ? u : null)
+            )
+        })
     },
     insert: (name, password) => {
         return new Promise((resolve, reject) => {
-            const userId = getLastId() + 1;
+            const userId = String(getLastId() + 1);
             console.log(userId)
             const newUser = { id: userId, name: name, password: password, isAdmin: false };
             users.push(newUser)

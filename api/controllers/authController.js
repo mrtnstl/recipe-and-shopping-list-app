@@ -39,12 +39,7 @@ const authController = {
 
         return res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
     },
-    register: async (req, res, next) => {
-        const { username, password } = req.body;
-        const user = await Users.insert(username, password);
-        console.log(user)
-        return res.status(200).json(user)
-    }
+
 
 }
 export default authController;

@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 
 import authRouter from "./routes/domain/authRoutes.js";
+import userRouter from "./routes/domain/userRoutes.js";
+import recipeRoutes from "./routes/domain/recipeRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -16,6 +18,8 @@ const shoppingListsModel = [
     { id: 3, user_id: 1, product_name: "paprika", product_quantity: 3, product_unit: "piece", estimated_price_per_unit: 70, currency: "HUF" },
     { id: 4, user_id: 1, product_name: "tej", product_quantity: 1, product_unit: "liter", estimated_price_per_unit: 352, currency: "HUF" },
 ]
-app.use("/api/auth", authRouter)
+app.use("/api", authRouter);
+app.use("/api", userRouter);
+app.use("/api", recipeRoutes);
 
 app.listen(5000, () => { console.log("Backend is running") });

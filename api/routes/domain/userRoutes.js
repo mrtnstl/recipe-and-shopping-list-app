@@ -1,14 +1,23 @@
+
+/*
+router.post("/", userController.createUser);
+router.get("/:userId", userController.getUser);
+router.put("/:userId", userController.modifyUser);
+router.post("/forgot-password", userController.getForgotPasswordLink);
+router.post("/:userId/:forgotPasswordToken", userController.setNewPassword);
+
+*/
+
+
+
 import express from "express";
-const router = express.Router();
+const userRouter = express.Router();
+//import authController
+import userController from "../../controllers/userController.js";
+//import middleware
+import { verify } from "../../middlewares/authMW.js"; // req.user !!!
 
-export default (objectRepository) => {
-    const { userMW } = objectRepository;
 
-    router.post("/", userController.createUser);
-    router.get("/:userId", userController.getUser);
-    router.put("/:userId", userController.modifyUser);
-    router.post("/forgot-password", userController.getForgotPasswordLink);
-    router.post("/:userId/:forgotPasswordToken", userController.setNewPassword);
-
-    return router;
-}
+userRouter.post("/register", userController.register);
+userRouter.get("/user/:userId", userController.getUser)
+export default userRouter;
