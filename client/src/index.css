@@ -25,4 +25,28 @@
     --borderRadius-lg: '8px';
 
     --boxShadow-brutal: '4px 4px 0px rgba(0, 0, 0, 1)';
+
+    --animate-color-play: colorPlay 17s ease-in-out infinite;
+
+    @keyframes colorPlay {
+        25% {
+            fill: var(--color-customOrange);
+        }
+
+        50% {
+            fill: var(--color-customYellow);
+        }
+
+        75% {
+            fill: var(--color-customGray);
+        }
+    }
 }
+
+
+
+.menuIcon {
+    @apply fill-customGray
+}
+
+/*motion-safe:animate-color-play*/

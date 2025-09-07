@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
-import heroImg from "./assets/images/clay-banks-hwLAI5lRhdM-unsplash.jpg"
+import { SearchIcon } from "./assets/icons/SVGIcons.jsx";
+
+import heroImg from "./assets/images/clay-banks-hwLAI5lRhdM-unsplash.jpg";
 
 import { fetchWithRetry } from "./utils/fetchWithAutoRefreshToken.js";
 import LoginForm from './components/LoginForm.jsx';
@@ -16,7 +18,8 @@ function App() {
 
   const fetchRecipeCount = async () => {
     try {
-      const recipeCountFetch = await fetch("http://localhost:5000/api/recipe/count", {
+      const apiUrl = import.meta.env.VITE_BACKEND_API_URL;
+      const recipeCountFetch = await fetch(`${apiUrl}/api/recipe/count`, {
         mode: "cors",
         headers: { "Content-Type": "application/json" }
       });
@@ -36,7 +39,8 @@ function App() {
 
   const fetchTopRecipes = async () => {
     try {
-      const topRecipesFetch = await fetch("http://localhost:5000/api/recipe?limit=6", {
+      const apiUrl = import.meta.env.VITE_BACKEND_API_URL;
+      const topRecipesFetch = await fetch(`${apiUrl}/api/recipe?limit=6`, {
         mode: "cors",
         headers: { "Content-Type": "application/json" }
       });
@@ -61,12 +65,14 @@ function App() {
         <section className='font-bold flex flex-col items-center'>
           <p className='text-xl mx-3'>Find quick instructions for your favorite dishes</p>
           <p className=' mx-3'>and create shopping lists based on them, to be sure to have everithing for the oven</p>
-          <p className=' mx-3'>Explore amongst our {recipeCount} recipes, shared by food enthusiasts, just like yourself!</p>
+
           {/*<img src={heroImg} alt="heroimage" width={300} className='w-[600px] rounded-2xl' />*/}
           <div className='flex flex-col items-center '>
             <form action="" className='p-2 my-2'>
-              <span className="border-2 shadow-[2px_2px_0_black]  p-2  rounded-xl bg-customBeige">
-                <label htmlFor="searchRecipe" className='mx-1'>S</label>
+              <span className="border-2 shadow-[2px_2px_0_black] p-2 rounded-xl bg-customBeige">
+                <label htmlFor="searchRecipe" className='mr-2'>
+                  <SearchIcon />
+                </label>
                 <input name="searchRecipe" id="searchRecipe" placeholder="Search For Yout Fave" type="text" />
               </span>
             </form>
@@ -75,7 +81,7 @@ function App() {
           </div>
         </section>
         <section>
-          <h2 className='font-bold text-lg'>Top 6 Dishes Based On Cooking Frequency</h2>
+          <h2 className='mx-3 font-bold text-lg'>Top 6 out of {recipeCount} Dishes Based On Cooking Frequency</h2>
           <div className=' justify-center grid grid-rows-6 sm:grid-rows-3 sm:grid-cols-2 gap-x-2 gap-y-2'>
 
             {topRecipes.length > 0 && topRecipes.map(recipe => (
