@@ -1,0 +1,43 @@
+//mock users service
+const users = [
+    { id: "1", name: "john", password: "John123", isAdmin: true },
+    { id: "2", name: "jane", password: "Jane123", isAdmin: false },
+];
+const getLastId = () => {
+    const ids = users.map(user => {
+        return user.id
+    })
+    console.log(ids)
+    return ids.length;
+}
+
+const Users = {
+    findOne: (username, password) => {
+        return new Promise((resolve, reject) => {
+            resolve(
+                users.find(u => {
+                    console.log(username, password)
+                    return u.name === username && u.password === password ? u : null;
+                })
+            )
+        })
+    },
+    find: () => {
+
+    },
+    insert: (name, password) => {
+        return new Promise((resolve, reject) => {
+            const userId = getLastId() + 1;
+            console.log(userId)
+            const newUser = { id: userId, name: name, password: password, isAdmin: false };
+            users.push(newUser)
+            resolve(newUser)
+        })
+
+    },
+    update: () => {
+
+    }
+}
+
+export default Users;
