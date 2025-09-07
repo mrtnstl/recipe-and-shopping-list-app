@@ -1,1 +1,28 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+@theme {
+
+    --color-customRed: #D9534F;
+    --color-customYellow: #FFD700;
+    --color-customOrange: #FF8C00;
+    --color-customLightGreen: #D3E0DC;
+    --color-customTeal: #40E0D0;
+    --color-customBeige: #F5DEB3;
+    --color-customGray: #1E3233;
+
+    --font-brutal: IBM Plex Sans, sans-serif;
+
+    --spacing-xs: '4px';
+    --spacing-sm: '8px';
+    --spacing-md: '16px';
+    --spacing-lg: '24px';
+    --spacing-xl: '32px';
+    --spacing-2xl: '48px';
+
+    --borderRadius-none: '0';
+    --borderRadius-sm: '2px';
+    --borderRadius-md: '4px';
+    --borderRadius-lg: '8px';
+
+    --boxShadow-brutal: '4px 4px 0px rgba(0, 0, 0, 1)';
+}
