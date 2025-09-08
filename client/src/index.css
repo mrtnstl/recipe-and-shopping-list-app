@@ -50,3 +50,7 @@
 }
 
 /*motion-safe:animate-color-play*/
+
+a.active {
+    @apply text-customRed
+}
