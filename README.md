@@ -1,6 +1,6 @@
 # recipe-and-shopping-list-webapp
 
-A webapplication where users can browse and upload recipes, create shopping lists for their chosen dishes and track their fridges content for more accurate shopping list generation.
+A web application themed around recipes and shopping lists, aiming to utilize *dependency injection* and *controller-service-repository pattern* on the backend. Another motivation for this project is to create a *retroish brutalist user interface*, inspired by the pastel colors of eastern street view's.
 
 ## Use Cases / user stories
 
