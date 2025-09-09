@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { SearchIcon } from "../assets/icons/SVGIcons.jsx";
+import { SearchIcon } from "../../assets/icons/SVGIcons.jsx";
 
 
-import heroImg from "../assets/images/clay-banks-hwLAI5lRhdM-unsplash.jpg";
+import heroImg from "../../assets/images/clay-banks-hwLAI5lRhdM-unsplash.jpg";
 
 const HomePage = () => {
     const [recipeCount, setRecipeCount] = useState("0");
@@ -18,7 +18,7 @@ const HomePage = () => {
             });
             const result = await recipeCountFetch.json();
             if (!recipeCountFetch.ok) { return console.log("fetch response err") };
-            console.log(result.recipe_count)
+
             setRecipeCount(result.recipe_count);
             return result;
         } catch (err) {
@@ -26,8 +26,8 @@ const HomePage = () => {
         }
     };
     useEffect(() => {
-        const { recipe_count } = fetchRecipeCount();
-        setRecipeCount(recipe_count);
+        fetchRecipeCount();
+        //setRecipeCount(recipe_count);
     }, []);
 
     const fetchTopRecipes = async () => {
@@ -39,17 +39,17 @@ const HomePage = () => {
             });
             if (!topRecipesFetch.ok) { return console.log("fetch response err") }
             const result = await topRecipesFetch.json();
-            console.log(result[0].title)
+
             setTopRecipes(result);
             return result;
         } catch (err) {
             console.log(err)
         }
-    }
+    };
     useEffect(() => {
-        const topRecipes = fetchTopRecipes();
-        setTopRecipes(topRecipes);
-    }, [])
+        fetchTopRecipes();
+        //setTopRecipes(topRecipes);
+    }, []);
     return (
         <section className='max-w-[1200px] self-center flex-1 font-brutal '>
             <section className='my-5 font-bold flex flex-col items-center'>
@@ -63,7 +63,7 @@ const HomePage = () => {
                             <label htmlFor="searchRecipe" className='mr-2' onClick={() => alert("searching recipe...")}>
                                 <SearchIcon />
                             </label>
-                            <input name="searchRecipe" id="searchRecipe" placeholder="Search For Yout Fave" type="text" />
+                            <input name="searchRecipe" id="searchRecipe" placeholder="Search For Your Fave" type="text" />
                         </span>
                     </form>
                     <p className='my-0.5'>or</p>

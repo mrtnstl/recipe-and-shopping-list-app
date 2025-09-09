@@ -1,4 +1,4 @@
-import ProfilePage from "../pages/ProfilePage";
+import ProfilePage from "../pages/user/ProfilePage";
 import { Outlet } from "react-router-dom";
 
 const ProfileLayout = () => {
