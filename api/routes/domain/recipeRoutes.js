@@ -4,5 +4,6 @@ import recipeController from "../../controllers/recipeController.js";
 const recipeRoutes = express.Router();
 
 recipeRoutes.get("/recipe", recipeController.getRecipes);
+recipeRoutes.get("/recipe/search", recipeController.searchRecipe);
 recipeRoutes.get("/recipe/count", recipeController.getRecipeCount);
 export default recipeRoutes;

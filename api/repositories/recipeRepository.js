@@ -24,7 +24,16 @@ const recipes = [
 
 
 const Recipes = {
-
+    searchRecipe: (searchTerm) => {
+        return new Promise((resolve, reject) => {
+            const result = [];
+            recipes.map(recipe => {
+                if (searchTerm === "") return result.push(recipe);
+                return (recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) || recipe.description.toLowerCase().includes(searchTerm.toLowerCase())) && result.push(recipe);
+            })
+            resolve(result);
+        })
+    },
     find: (limit) => {
         return new Promise((resolve, reject) => {
             const result = [];
