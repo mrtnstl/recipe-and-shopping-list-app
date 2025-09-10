@@ -1,45 +1,45 @@
-//import services here
 import authService from "../services/authService.js";
-import authHelpers from "../utils/authHelpers.js";
 import MockCache from "../services/cache/mockCacheStore.js";
-
-// USER SERVICE
-import Users from "../repositories/userRepository.js";
 
 const authController = {
     login: async (req, res, next) => {
         const { username, password } = req.body;
+        try {
+            const user = await authService.getUser(username, password);
+            if (!user) return res.status(400).json({ message: "Invalid login credentials!" });
 
-        const user = await Users.findOne(username, password);
-        console.log("RESU", user)
-        if (!user) return res.status(400).json({ message: "Invalid login credentials!" });
+            const accessToken = await authService.getAccessToken(user);
+            const refreshToken = await authService.getRefreshToken(user);
+            MockCache.refreshTokens.push(refreshToken);
 
-        const accessToken = authHelpers.generateAccessToken(user);
-        const refreshToken = authHelpers.generateRefreshToken(user);
-        MockCache.refreshTokens.push(refreshToken);
-
-        return res.json({ username: user.name, isAdmin: user.isAdmin, accessToken, refreshToken });
-
+            return res.status(200).json({ username: user.name, isAdmin: user.isAdmin, accessToken, refreshToken });
+        } catch (err) {
+            const statusCode = err.statusCode || 400;
+            return res.status(statusCode).json({ message: err.message });
+        }
     },
-    logout: (req, res, next) => {
+    logout: async (req, res, next) => {
         const refreshToken = req.body.token;
-        MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken);
+
+        const destroyToken = await authService.destroyRefreshToken(refreshToken);
+        if (!destroyToken) return res.status(400).json({ message: "Failed to log out!" });
+
         return res.status(200).json({ message: "Logged out!" });
     },
     refresh: async (req, res, next) => {
         const refreshToken = req.body.token;
-        console.log("Refresh request", refreshToken)
 
         if (!refreshToken) return res.status(401).json({ message: "You aren't authenticated!" });
 
-        if (MockCache.refreshTokens.includes(refreshToken)) console.log("Refresh req, a tömb tartalmazza a refreshTokent");
         if (!MockCache.refreshTokens.includes(refreshToken)) return res.status(403).json({ message: "Invalid refresh token!" });
 
-        const { newAccessToken, newRefreshToken } = await authService.refreshExpiringRefreshToken(refreshToken);
-
-        return res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+        try {
+            const { newAccessToken, newRefreshToken } = await authService.refreshExpiringRefreshToken(refreshToken);
+            return res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+        } catch (err) {
+            const statusCode = err.statusCode || 400;
+            return res.status(statusCode).json({ message: err.message });
+        }
     },
-
-
 }
 export default authController;

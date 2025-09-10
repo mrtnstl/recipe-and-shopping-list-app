@@ -47,10 +47,6 @@ More details about the stack below...
 
 [API documentation in progress](https://github.com/mrtnstl/recipe-and-shopping-list-app/blob/main/docs/api_documentation.yaml "API documentation")
 
-#### Middleware
- 
- ...
-
 ### Database
 
 Models

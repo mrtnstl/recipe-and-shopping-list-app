@@ -21,7 +21,7 @@ const recipes = [
     { id: 20, title: "Banana Pancakes", description: "Fluffy pancakes with bananas", minutes_needed: 20 }
 ];
 
-
+// TODO: change array iterations to sql querys when db is ready
 
 const Recipes = {
     searchRecipe: (searchTerm) => {
@@ -29,7 +29,10 @@ const Recipes = {
             const result = [];
             recipes.map(recipe => {
                 if (searchTerm === "") return result.push(recipe);
-                return (recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) || recipe.description.toLowerCase().includes(searchTerm.toLowerCase())) && result.push(recipe);
+                return (
+                    recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    recipe.description.toLowerCase().includes(searchTerm.toLowerCase())
+                ) && result.push(recipe);
             })
             resolve(result);
         })
@@ -49,7 +52,6 @@ const Recipes = {
             resolve(recipes.length);
         })
     }
-
 }
 
 export default Recipes;

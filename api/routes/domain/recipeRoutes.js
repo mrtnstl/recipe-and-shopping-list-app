@@ -1,9 +1,10 @@
 import express from "express";
 import recipeController from "../../controllers/recipeController.js";
 
-const recipeRoutes = express.Router();
+const recipeRouter = express.Router();
 
-recipeRoutes.get("/recipe", recipeController.getRecipes);
-recipeRoutes.get("/recipe/search", recipeController.searchRecipe);
-recipeRoutes.get("/recipe/count", recipeController.getRecipeCount);
-export default recipeRoutes;
+recipeRouter.get("/recipe", recipeController.getRecipes);
+recipeRouter.get("/recipe/search", recipeController.searchRecipe);
+recipeRouter.get("/recipe/count", recipeController.getRecipeCount);
+
+export default recipeRouter;

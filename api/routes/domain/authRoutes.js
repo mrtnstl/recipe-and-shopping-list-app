@@ -1,10 +1,8 @@
 import express from "express";
-const authRouter = express.Router();
-//import authController
 import authController from "../../controllers/authController.js";
-//import middleware
 import { verify } from "../../middlewares/authMW.js";
 
+const authRouter = express.Router();
 
 authRouter.post("/login", authController.login);
 authRouter.post("/logout", verify, authController.logout);
