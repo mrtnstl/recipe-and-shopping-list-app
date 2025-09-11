@@ -14,8 +14,8 @@ import { initUserRouter } from "./domain/userRoutes.js";
 import { initRecipeRouter } from "./domain/recipeRoutes.js";
 
 
-export default function initRoutes(app) {
-    const objectRepository = { verify, MockCache, recipeService, authService, userService, Users, Recipes };
+export default function initRoutes(app, pool) {
+    const objectRepository = { pool, verify, MockCache, recipeService, authService, userService, Users, Recipes };
 
     const authRouter = initAuthRouter(objectRepository);
     const userRouter = initUserRouter(objectRepository);
@@ -28,6 +28,5 @@ export default function initRoutes(app) {
     app.use((req, res) => {
         return res.status(404).json({ message: "Not Found!" });
     });
-
 }
 
