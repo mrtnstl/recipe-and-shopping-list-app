@@ -1,11 +1,14 @@
 import express from "express";
 import authController from "../../controllers/authController.js";
-import { verify } from "../../middlewares/authMW.js";
 
-const authRouter = express.Router();
+export function initAuthRouter(objectRepository) {
+    const { verify } = objectRepository;
 
-authRouter.post("/login", authController.login);
-authRouter.post("/logout", verify, authController.logout);
-authRouter.post("/refresh", authController.refresh);
+    const authRouter = express.Router();
 
-export default authRouter;
+    authRouter.post("/login", authController.login(objectRepository));
+    authRouter.post("/logout", verify, authController.logout(objectRepository));
+    authRouter.post("/refresh", authController.refresh(objectRepository));
+
+    return authRouter;
+}

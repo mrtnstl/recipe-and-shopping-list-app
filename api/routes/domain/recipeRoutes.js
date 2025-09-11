@@ -1,10 +1,12 @@
 import express from "express";
 import recipeController from "../../controllers/recipeController.js";
 
-const recipeRouter = express.Router();
+export function initRecipeRouter(objectRepository) {
+    const recipeRouter = express.Router();
 
-recipeRouter.get("/recipe", recipeController.getRecipes);
-recipeRouter.get("/recipe/search", recipeController.searchRecipe);
-recipeRouter.get("/recipe/count", recipeController.getRecipeCount);
+    recipeRouter.get("/recipe", recipeController.getRecipes(objectRepository));
+    recipeRouter.get("/recipe/search", recipeController.searchRecipe(objectRepository));
+    recipeRouter.get("/recipe/count", recipeController.getRecipeCount(objectRepository));
 
-export default recipeRouter;
+    return recipeRouter;
+}
