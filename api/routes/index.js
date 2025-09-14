@@ -1,3 +1,5 @@
+// third party packages
+import { v4 as uuidv4 } from "uuid";
 // services and repositorys/models for dependency injection
 import recipeService from "../services/recipeService.js";
 import authService from "../services/authService.js";
@@ -15,7 +17,7 @@ import { initRecipeRouter } from "./domain/recipeRoutes.js";
 
 
 export default function initRoutes(app, pool) {
-    const objectRepository = { pool, verify, MockCache, recipeService, authService, userService, Users, Recipes };
+    const objectRepository = { pool, uuidv4, verify, MockCache, recipeService, authService, userService, Users, Recipes };
 
     const authRouter = initAuthRouter(objectRepository);
     const userRouter = initUserRouter(objectRepository);
@@ -25,6 +27,7 @@ export default function initRoutes(app, pool) {
     app.use("/api", userRouter);
     app.use("/api", recipeRouter);
 
+    // wildcard route
     app.use((req, res) => {
         return res.status(404).json({ message: "Not Found!" });
     });

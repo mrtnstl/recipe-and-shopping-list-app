@@ -18,13 +18,16 @@ const Users = {
             resolve(users.find(u => u.id === userId ? u : null));
         });
     },
-    insert: (name, password) => {
-        return new Promise((resolve, reject) => {
-            const userId = String(getLastId() + 1);
-            const newUser = { id: userId, name: name, password: password, isAdmin: false };
-            users.push(newUser);
-            resolve(newUser);
-        });
+    insert: (objectRepository) => {
+        const { pool } = objectRepository;
+        return async (dataArray) => {
+            try {
+                const insertNewUser = await pool.query("INSERT INTO users(user_name, user_handle, user_email, user_sex, pw_hash, pw_salt) VALUES($1, $2, $3, $4, $5, $6)", dataArray);
+                return insertNewUser;
+            } catch (err) {
+                throw new Error(err.message);
+            }
+        }
     },
     update: () => { }
 }

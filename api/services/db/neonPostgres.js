@@ -12,7 +12,10 @@ const pool = new Pool({
     },
 });
 
-export async function getPgVersion(cb) {
+export async function initDb(cb) {
+
+    //const createUsersTable = await pool.query("CREATE TABLE IF NOT EXISTS users()")
+
     try {
         const client = await pool.connect();
         const { rows } = await client.query("SELECT version()");

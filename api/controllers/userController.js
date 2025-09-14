@@ -1,10 +1,10 @@
 const userController = {
     register: (objectRepository) => {
-        const { Users } = objectRepository;
+        const { userService } = objectRepository;
         return async (req, res, next) => {
-            const { username, password } = req.body;
+            const { userName, userEmail, password, userSex } = req.body;
             try {
-                const user = await Users.insert(username, password);
+                const user = await userService.createUser(objectRepository)(userName, userEmail, password, userSex);
                 return res.status(200).json(user);
             } catch (err) {
                 const statusCode = err.statusCode || 400;
@@ -13,11 +13,11 @@ const userController = {
         }
     },
     getUser: (objectRepository) => {
-        const { Users } = objectRepository;
+        const { userService } = objectRepository;
         return async (req, res, next) => {
             const { userId } = req.params;
             try {
-                const user = await Users.findById(userId);
+                const user = await userService.getUserById(userId);
                 return res.status(200).json(user);
             } catch (err) {
                 const statusCode = err.statusCode || 400;
@@ -25,6 +25,5 @@ const userController = {
             }
         }
     }
-}
-
+};
 export default userController;
