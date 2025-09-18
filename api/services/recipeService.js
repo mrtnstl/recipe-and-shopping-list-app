@@ -12,6 +12,12 @@ const recipeService = {
     searchRecipe: async (serachTerm) => {
         const recipes = await Recipes.searchRecipe(serachTerm);
         return recipes;
+    },
+    newRecipe: (objectRepository) => {
+        const { Recipes } = objectRepository;
+        return async (newRecipe) => {
+            return Recipes.insert(objectRepository)(newRecipe);
+        }
     }
 }
 export default recipeService;

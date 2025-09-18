@@ -5,24 +5,37 @@ import authHelpers from "../utils/authHelpers.js";
 import Users from "../repositories/userRepository.js";
 
 const authService = {
-    getUser: async (username, password) => {
-        const user = await Users.findOne(username, password);
-        return user;
+    getUser: (objectRepository) => {
+        const { Users } = objectRepository;
+        return async (username, password) => {
+            const user = await Users.findOne(username, password);
+            return user;
+        }
     },
-    getAccessToken: async (user) => {
-        const accessToken = authHelpers.generateAccessToken(user);
-        return accessToken;
+    getAccessToken: (objectRepository) => {
+        const { authHelpers } = objectRepository;
+        return async (user) => {
+            const accessToken = authHelpers.generateAccessToken(user);
+            return accessToken;
+        }
     },
-    getRefreshToken: async (user) => {
-        const refreshToken = authHelpers.generateRefreshToken(user);
-        return refreshToken;
+    getRefreshToken: (objectRepository) => {
+        const { authHelpers } = objectRepository;
+        return async (user) => {
+            const refreshToken = authHelpers.generateRefreshToken(user);
+            return refreshToken;
+        }
     },
-    destroyRefreshToken: async (refreshToken) => {
-        MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken);
-        return true;
+    destroyRefreshToken: (objectRepository) => {
+        const { MockCache } = objectRepository;
+        return async (refreshToken) => {
+            MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken);
+            return true;
+        }
     },
-    refreshExpiringRefreshToken: (refreshToken) => {
-        return new Promise((resolve, reject) => {
+    refreshExpiringRefreshToken: (objectRepository) => {
+        const { MockCache, authHelpers } = objectRepository;
+        return async (refreshToken) => {
             jwt.verify(refreshToken, "my-very-secret-refresh-key", (err, payload) => {
                 if (err) throw new Error(err);
 
@@ -33,9 +46,9 @@ const authService = {
 
                 MockCache.refreshTokens.push(newRefreshToken);
 
-                resolve({ newAccessToken, newRefreshToken });
+                return ({ newAccessToken, newRefreshToken });
             });
-        });
+        }
     }
 };
 

@@ -1,14 +1,13 @@
 import { genSalt, hash } from "bcrypt";
-import Users from "../repositories/userRepository.js";
-import { generateUserHandle, generateUserId } from "../utils/userHelpers.js";
+
 const userService = {
     createUser: (objectRepository) => {
-        const { Users } = objectRepository;
+        const { Users, userHelpers } = objectRepository;
         return async (userName, userEmail, password, userSex) => {
 
-            const userId = generateUserId(); // postgres should generate this uuid!!!
+            const userId = userHelpers.generateUserId(); // postgres should generate this uuid!!!
 
-            const userHandle = generateUserHandle(userName);
+            const userHandle = userHelpers.generateUserHandle(userName);
             const profilePic = "";
 
             const passwordSalt = await genSalt(8);
@@ -29,9 +28,12 @@ const userService = {
 
         }
     },
-    getUserById: async (userId) => {
-        const user = await Users.findById(userId);
-        return user;
+    getUserById: (objectRepository) => {
+        const { Users } = objectRepository;
+        return async (userId) => {
+            const user = await Users.findById(userId);
+            return user;
+        }
     }
 };
 

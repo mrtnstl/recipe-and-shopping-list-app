@@ -51,6 +51,18 @@ const Recipes = {
         return new Promise(resolve => {
             resolve(recipes.length);
         })
+    },
+    insert: (objectRepository) => {
+        const { pool } = objectRepository;
+        return async (newRecipe) => {
+            try {
+                const recipe = await pool.query("INSERT INTO recipes(id, title, user_id, description, minutes_needed) VALUES($1, $2, $3, $4, $5) RETURNING id", newRecipe);
+                console.log(recipe.rows[0].id)
+                return recipe.rows[0].id;
+            } catch (err) {
+                throw new Error(err.message);
+            }
+        }
     }
 }
 

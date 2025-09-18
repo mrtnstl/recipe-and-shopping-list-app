@@ -7,6 +7,6 @@ export function initRecipeRouter(objectRepository) {
     recipeRouter.get("/recipe", recipeController.getRecipes(objectRepository));
     recipeRouter.get("/recipe/search", recipeController.searchRecipe(objectRepository));
     recipeRouter.get("/recipe/count", recipeController.getRecipeCount(objectRepository));
-
+    recipeRouter.post("/recipe", recipeController.createRecipe(objectRepository));
     return recipeRouter;
 }

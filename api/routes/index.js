@@ -14,10 +14,16 @@ import MockCache from "../services/cache/mockCacheStore.js";
 import { initAuthRouter } from "./domain/authRoutes.js";
 import { initUserRouter } from "./domain/userRoutes.js";
 import { initRecipeRouter } from "./domain/recipeRoutes.js";
-
+// helpers
+import authHelpers from "../utils/authHelpers.js";
+import userHelpers from "../utils/userHelpers.js";
+import ErrorClasses from "../utils/ErrorClasses.js";
 
 export default function initRoutes(app, pool) {
-    const objectRepository = { pool, uuidv4, verify, MockCache, recipeService, authService, userService, Users, Recipes };
+    const objectRepository = {
+        pool, uuidv4, verify, MockCache, recipeService, authService, userService,
+        authHelpers, userHelpers, ErrorClasses, Users, Recipes
+    };
 
     const authRouter = initAuthRouter(objectRepository);
     const userRouter = initUserRouter(objectRepository);
