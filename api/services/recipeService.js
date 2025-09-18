@@ -1,13 +1,18 @@
 import Recipes from "../repositories/recipeRepository.js";
 
 const recipeService = {
-    getRecipes: async (limit) => {
-        const recipes = await Recipes.find(limit);
-        return recipes;
+    getRecipes: (objectRepository) => {
+        const { Recipes } = objectRepository;
+        return async (limit) => {
+            const recipes = await Recipes.find(objectRepository)(limit);
+            return recipes;
+        }
     },
-    getRecipeCount: async () => {
-        const recipeCount = await Recipes.count();
-        return recipeCount;
+    getRecipeCount: (objectRepository) => {
+        return async () => {
+            const recipeCount = await Recipes.count(objectRepository)();
+            return recipeCount;
+        }
     },
     searchRecipe: async (serachTerm) => {
         const recipes = await Recipes.searchRecipe(serachTerm);

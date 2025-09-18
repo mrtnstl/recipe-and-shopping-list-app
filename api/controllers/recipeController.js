@@ -3,9 +3,9 @@ const recipeController = {
         const { recipeService } = objectRepository;
         return async (req, res, next) => {
             const { limit } = req.query;
-
+            let validatedLimit = typeof limit === "undefined" ? 6 : limit;
             try {
-                const recipes = await recipeService.getRecipes(limit);
+                const recipes = await recipeService.getRecipes(objectRepository)(validatedLimit);
                 return res.status(200).json(recipes);
             } catch (err) {
                 const statusCode = err.statusCode || 400;
@@ -17,7 +17,7 @@ const recipeController = {
         const { recipeService } = objectRepository;
         return async (req, res, next) => {
             try {
-                const recipeCount = await recipeService.getRecipeCount();
+                const recipeCount = await recipeService.getRecipeCount(objectRepository)();
                 return res.status(200).json({ recipe_count: recipeCount });
             } catch (err) {
                 const statusCode = err.statusCode || 400;

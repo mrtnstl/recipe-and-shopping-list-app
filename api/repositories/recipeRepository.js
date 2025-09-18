@@ -37,20 +37,27 @@ const Recipes = {
             resolve(result);
         })
     },
-    find: (limit) => {
-        return new Promise((resolve, reject) => {
-            const result = [];
-            const iterationCount = limit ? recipes.length - limit : 0;
-            for (let i = recipes.length - 1; i >= iterationCount; i--) {
-                result.push(recipes[i]);
+    find: (objectRepository) => {
+        const { pool } = objectRepository;
+        return async (limit) => {
+            try {
+                const { rows } = await pool.query("SELECT * FROM recipes ORDER BY created_at DESC LIMIT $1 OFFSET 0", [limit]);
+                return rows;
+            } catch (err) {
+                throw new Error(err.message);
             }
-            resolve(result);
-        })
+        }
     },
-    count: () => {
-        return new Promise(resolve => {
-            resolve(recipes.length);
-        })
+    count: (objectRepository) => {
+        const { pool } = objectRepository;
+        return async () => {
+            try {
+                const recipeCount = await pool.query("SELECT COUNT(*) FROM recipes;");
+                return recipeCount.rows[0].count;
+            } catch (err) {
+                throw new Error(err.message);
+            }
+        }
     },
     insert: (objectRepository) => {
         const { pool } = objectRepository;
