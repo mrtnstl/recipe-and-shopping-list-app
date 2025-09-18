@@ -1,5 +1,5 @@
-const recipeController = {
-    getRecipes: (objectRepository) => {
+class RecipeController {
+    getRecipes(objectRepository) {
         const { recipeService } = objectRepository;
         return async (req, res, next) => {
             const { limit } = req.query;
@@ -12,8 +12,8 @@ const recipeController = {
                 return res.status(statusCode).json({ message: err.message });
             }
         }
-    },
-    getRecipeCount: (objectRepository) => {
+    }
+    getRecipeCount(objectRepository) {
         const { recipeService } = objectRepository;
         return async (req, res, next) => {
             try {
@@ -24,8 +24,8 @@ const recipeController = {
                 return res.status(statusCode).json({ message: err.message });
             }
         }
-    },
-    searchRecipe: (objectRepository) => {
+    }
+    searchRecipe(objectRepository) {
         const { recipeService } = objectRepository;
         return async (req, res, next) => {
             const { keyword } = req.query;
@@ -33,15 +33,16 @@ const recipeController = {
             const serachTerm = keyword || "";
 
             try {
-                const recipes = await recipeService.searchRecipe(serachTerm);
+                const recipes = await recipeService.searchRecipe(objectRepository)(serachTerm);
+                console.log(recipes)
                 return res.status(200).json(recipes);
             } catch (err) {
                 const statusCode = err.statusCode || 400;
                 return res.status(statusCode).json({ message: err.message });
             }
         }
-    },
-    createRecipe: (objectRepository) => {
+    }
+    createRecipe(objectRepository) {
         const { recipeService } = objectRepository;
         return async (req, res) => {
             const { recipeName, recipeDescription, minutesNeeded } = req.body;
@@ -61,13 +62,13 @@ const recipeController = {
                 return res.status(400).json({ message: err.message })
             }
         }
-    },
-    createRecipeIngredients: (objectRepository) => {
+    }
+    createRecipeIngredients(objectRepository) {
         return async (req, res) => { }
-    },
-    createExecutionSteps: (objectRepository) => {
+    }
+    createExecutionSteps(objectRepository) {
         return async (req, res) => { }
     }
 
 }
-export default recipeController;
+export default new RecipeController();

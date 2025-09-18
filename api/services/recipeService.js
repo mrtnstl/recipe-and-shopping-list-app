@@ -1,28 +1,32 @@
-import Recipes from "../repositories/recipeRepository.js";
-
-const recipeService = {
-    getRecipes: (objectRepository) => {
+class RecipeService {
+    //const recipeService = {
+    getRecipes(objectRepository) {
         const { Recipes } = objectRepository;
         return async (limit) => {
             const recipes = await Recipes.find(objectRepository)(limit);
             return recipes;
         }
-    },
-    getRecipeCount: (objectRepository) => {
+    }
+    getRecipeCount(objectRepository) {
+        const { Recipes } = objectRepository;
         return async () => {
             const recipeCount = await Recipes.count(objectRepository)();
             return recipeCount;
         }
-    },
-    searchRecipe: async (serachTerm) => {
-        const recipes = await Recipes.searchRecipe(serachTerm);
-        return recipes;
-    },
-    newRecipe: (objectRepository) => {
+    }
+    searchRecipe(objectRepository) {
+        const { Recipes } = objectRepository;
+        return async (serachTerm) => {
+            const recipes = !serachTerm ? await Recipes.find(objectRepository)(10) : await Recipes.searchRecipe(objectRepository)(serachTerm);
+            return recipes;
+        }
+    }
+    newRecipe(objectRepository) {
         const { Recipes } = objectRepository;
         return async (newRecipe) => {
             return Recipes.insert(objectRepository)(newRecipe);
         }
     }
 }
-export default recipeService;
+export default new RecipeService();
+//export default recipeService;
