@@ -12,7 +12,7 @@ class AuthenticationError extends Error {
         this.statusCode = "";
     }
 }
-
+// TODO: finish this (might ditch custom errors, not sure)
 
 const ErrorClasses = { DatabaseError, AuthenticationError };
 export default ErrorClasses;

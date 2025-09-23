@@ -1,5 +1,4 @@
 class RecipeService {
-    //const recipeService = {
     getRecipes(objectRepository) {
         const { Recipes } = objectRepository;
         return async (limit) => {
@@ -29,4 +28,3 @@ class RecipeService {
     }
 }
 export default new RecipeService();
-//export default recipeService;

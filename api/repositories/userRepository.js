@@ -2,10 +2,6 @@ const users = [
     { id: "1", name: "john", password: "John123", isAdmin: true },
     { id: "2", name: "jane", password: "Jane123", isAdmin: false },
 ];
-const getLastId = () => {
-    const ids = users.map(user => { return user.id });
-    return ids.length;
-};
 
 const Users = {
     findOne: (username, password) => {

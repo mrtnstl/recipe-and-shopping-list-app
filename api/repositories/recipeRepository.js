@@ -3,7 +3,7 @@ const Recipes = {
         const { pool } = objectRepository;
         return async (searchTerm) => {
             try {
-                const searchResult = await pool.query("SELECT * FROM recipes WHERE title = $1 ORDER BY created_at DESC;", [searchTerm]); //WHERE LOWER(title) = LOWER($1) OR LOWER(description) = LOWER($1)
+                const searchResult = await pool.query("SELECT * FROM recipes WHERE title = $1 ORDER BY created_at DESC;", [searchTerm]); // TODO: rethink this!
                 return searchResult.rows;
             } catch (err) {
                 throw new Error(err.message);
@@ -37,7 +37,7 @@ const Recipes = {
         return async (newRecipe) => {
             try {
                 const recipe = await pool.query("INSERT INTO recipes(id, title, user_id, description, minutes_needed) VALUES($1, $2, $3, $4, $5) RETURNING id;", newRecipe);
-                console.log(recipe.rows[0].id)
+                console.log(recipe.rows[0].id) // TODO: delete clg when not needed
                 return recipe.rows[0].id;
             } catch (err) {
                 throw new Error(err.message);

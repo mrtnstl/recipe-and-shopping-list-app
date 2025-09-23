@@ -1,6 +1,9 @@
 import express from "express";
-const homePageRoutes = express.Router;
 
-homePageRoutes.get("/")
+export function initHomePageRouter(objectRepository) {
+    const homePageRouter = express.Router();
 
-export default homePageRoutes;
+    //homePageRouter.get("/"); TODO: 
+
+    return homePageRouter;
+}

@@ -1,6 +1,8 @@
+// imports for DI
 // third party packages
 import { v4 as uuidv4 } from "uuid";
-// services and repositorys/models for dependency injection
+import jwt from "jsonwebtoken";
+// services and repositorys/models
 import recipeService from "../services/recipeService.js";
 import authService from "../services/authService.js";
 import userService from "../services/userService.js";
@@ -10,18 +12,18 @@ import Recipes from "../repositories/recipeRepository.js";
 import { verify } from "../middlewares/authMW.js";
 // cache storage
 import MockCache from "../services/cache/mockCacheStore.js";
-// route initiator functions
-import { initAuthRouter } from "./domain/authRoutes.js";
-import { initUserRouter } from "./domain/userRoutes.js";
-import { initRecipeRouter } from "./domain/recipeRoutes.js";
 // helpers
 import authHelpers from "../utils/authHelpers.js";
 import userHelpers from "../utils/userHelpers.js";
 import ErrorClasses from "../utils/ErrorClasses.js";
+// route initiator functions
+import { initAuthRouter } from "./domain/authRoutes.js";
+import { initUserRouter } from "./domain/userRoutes.js";
+import { initRecipeRouter } from "./domain/recipeRoutes.js";
 
 export default function initRoutes(app, pool) {
     const objectRepository = {
-        pool, uuidv4, verify, MockCache, recipeService, authService, userService,
+        pool, uuidv4, jwt, verify, MockCache, recipeService, authService, userService,
         authHelpers, userHelpers, ErrorClasses, Users, Recipes
     };
 

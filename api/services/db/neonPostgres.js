@@ -13,17 +13,15 @@ const pool = new Pool({
 });
 
 export async function initDb(cb) {
-
-    //const createUsersTable = await pool.query("CREATE TABLE IF NOT EXISTS users()")
-
     try {
         const client = await pool.connect();
         const { rows } = await client.query("SELECT version()");
+
         console.log(rows[0]);
+
         cb(null, pool);
         client.release();
     } catch (err) {
         cb(err, null);
     }
 }
-

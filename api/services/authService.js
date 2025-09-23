@@ -1,9 +1,3 @@
-import jwt from "jsonwebtoken";
-
-import MockCache from "./cache/mockCacheStore.js";
-import authHelpers from "../utils/authHelpers.js";
-import Users from "../repositories/userRepository.js";
-
 const authService = {
     getUser: (objectRepository) => {
         const { Users } = objectRepository;
@@ -29,22 +23,22 @@ const authService = {
     destroyRefreshToken: (objectRepository) => {
         const { MockCache } = objectRepository;
         return async (refreshToken) => {
-            MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken);
+            MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken); // TODO: change MockCache to Redis
             return true;
         }
     },
-    refreshExpiringRefreshToken: (objectRepository) => {
-        const { MockCache, authHelpers } = objectRepository;
+    refreshExpiringTokens: (objectRepository) => {
+        const { MockCache, authHelpers, jwt } = objectRepository;
         return async (refreshToken) => {
             jwt.verify(refreshToken, "my-very-secret-refresh-key", (err, payload) => {
                 if (err) throw new Error(err);
 
-                MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken);
+                MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken); // TODO: change MockCache to Redis
 
                 const newAccessToken = authHelpers.generateAccessToken(payload);
                 const newRefreshToken = authHelpers.generateRefreshToken(payload);
 
-                MockCache.refreshTokens.push(newRefreshToken);
+                MockCache.refreshTokens.push(newRefreshToken); // TODO: change MockCache to Redis
 
                 return ({ newAccessToken, newRefreshToken });
             });

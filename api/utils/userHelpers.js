@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-function generateUserId() {
+function generateUserId() { // TODO: func not needed, postgres generates uuids
     return uuidv4();
 }
 function generateUserHandle(userName) {

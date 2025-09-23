@@ -3,7 +3,9 @@ class RecipeController {
         const { recipeService } = objectRepository;
         return async (req, res, next) => {
             const { limit } = req.query;
+
             let validatedLimit = typeof limit === "undefined" ? 6 : limit;
+
             try {
                 const recipes = await recipeService.getRecipes(objectRepository)(validatedLimit);
                 return res.status(200).json(recipes);
@@ -34,7 +36,7 @@ class RecipeController {
 
             try {
                 const recipes = await recipeService.searchRecipe(objectRepository)(serachTerm);
-                console.log(recipes)
+                console.log(recipes) // TODO: delete this when not needed
                 return res.status(200).json(recipes);
             } catch (err) {
                 const statusCode = err.statusCode || 400;
@@ -46,7 +48,11 @@ class RecipeController {
         const { recipeService } = objectRepository;
         return async (req, res) => {
             const { recipeName, recipeDescription, minutesNeeded } = req.body;
-            if (typeof recipeName === "undefined" || typeof recipeDescription === "undefined" || typeof minutesNeeded === "undefined") return res.send(400).json({ message: "Missing Crutial Recipe Data!" });
+
+            if (typeof recipeName === "undefined" ||
+                typeof recipeDescription === "undefined" ||
+                typeof minutesNeeded === "undefined")
+                return res.send(400).json({ message: "Missing recipe parameter(s)!" });
 
             const recipeId = recipeName[0].toLowerCase() + recipeName[1].toLowerCase() + Math.floor((Math.random() * 100000));
 

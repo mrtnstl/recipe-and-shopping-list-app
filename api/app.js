@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json());
 
-const corsOptions = { origin: "http://localhost:5173" };
+const corsOptions = { origin: "http://localhost:5173" }; // TODO: implement accepted domain whitelist
 app.use(cors());
 
 initDb((err, pool) => {

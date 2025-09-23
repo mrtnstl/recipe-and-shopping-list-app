@@ -2,4 +2,4 @@
 
 
 
-// get recipe count and top 6 recipes
+// TODO: get recipe count and top 6 recipes for homepage here

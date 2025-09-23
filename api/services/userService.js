@@ -8,7 +8,7 @@ const userService = {
             const userId = userHelpers.generateUserId(); // postgres should generate this uuid!!!
 
             const userHandle = userHelpers.generateUserHandle(userName);
-            const profilePic = "";
+            const profilePic = ""; // TODO: user registration should be a two step process
 
             const passwordSalt = await genSalt(8);
             const passwordHash = await hash(password, passwordSalt);
@@ -23,8 +23,8 @@ const userService = {
     checkUserCredentials: (objectRepository) => {
         const { pool } = objectRepository;
         return async (userEmail, password) => {
-            const user = await pool.query("SELECT id, user_name, user_handle, user_email FROM users WHERE user_email = $1", [userEmail]);
-            // hash and compare supplied pw with pw_hash
+            const user = await pool.query("SELECT id, user_name, user_handle, user_email FROM users WHERE user_email = $1", [userEmail]); // TODO: move query into repository layer 
+            // TODO: hash and compare supplied pw with pw_hash here
 
         }
     },
