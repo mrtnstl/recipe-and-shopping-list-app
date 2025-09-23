@@ -41,11 +41,9 @@ A web application themed around recipes and shopping lists, aiming to utilize *d
 | Backend   | Node.js, Express      |
 | Db        | Postgres              |
 
-More details about the stack below...
-
 ### Backend
 
-[API documentation in progress](https://github.com/mrtnstl/recipe-and-shopping-list-app/blob/main/docs/api_documentation.yaml "API documentation")
+[API documentation in progress...](https://github.com/mrtnstl/recipe-and-shopping-list-app/blob/main/docs/api_documentation.yaml "API documentation")
 
 ### Database
 
