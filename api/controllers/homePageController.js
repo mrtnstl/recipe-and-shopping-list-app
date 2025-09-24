@@ -1,4 +1,3 @@
-// TODO: get recipe count and top 6 recipes for homepage here
 class HomePageController {
     getPageData(objectRepository) {
         const { recipeService } = objectRepository;
