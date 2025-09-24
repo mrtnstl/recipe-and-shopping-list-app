@@ -11,7 +11,8 @@ import Recipes from "../repositories/recipeRepository.js";
 // middleware
 import { verify } from "../middlewares/authMW.js";
 // cache storage
-import MockCache from "../services/cache/mockCacheStore.js";
+//import MockCache from "../services/cache/mockCacheStore.js";
+import * as Cache from "../services/cache/mockCacheStore.js";
 // helpers
 import authHelpers from "../utils/authHelpers.js";
 import userHelpers from "../utils/userHelpers.js";
@@ -20,10 +21,11 @@ import ErrorClasses from "../utils/ErrorClasses.js";
 import { initAuthRouter } from "./domain/authRoutes.js";
 import { initUserRouter } from "./domain/userRoutes.js";
 import { initRecipeRouter } from "./domain/recipeRoutes.js";
+import { initHomePageRouter } from "./bff/homePageRoutes.js";
 
 export default function initRoutes(app, pool) {
     const objectRepository = {
-        pool, uuidv4, jwt, verify, MockCache, recipeService, authService, userService,
+        pool, uuidv4, jwt, verify, Cache, recipeService, authService, userService,
         authHelpers, userHelpers, ErrorClasses, Users, Recipes
     };
 
@@ -31,9 +33,14 @@ export default function initRoutes(app, pool) {
     const userRouter = initUserRouter(objectRepository);
     const recipeRouter = initRecipeRouter(objectRepository);
 
+    const homePageRouter = initHomePageRouter(objectRepository);
+
     app.use("/api", authRouter);
     app.use("/api", userRouter);
     app.use("/api", recipeRouter);
+    app.use("/homepage", homePageRouter);
+
+    // TODO: add express error mw
 
     // wildcard route
     app.use((req, res) => {

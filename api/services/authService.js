@@ -21,27 +21,24 @@ const authService = {
         }
     },
     destroyRefreshToken: (objectRepository) => {
-        const { MockCache } = objectRepository;
+        const { Cache } = objectRepository;
         return async (refreshToken) => {
-            MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken); // TODO: change MockCache to Redis
+            Cache.destroy(refreshToken); // TODO: change MockCache to Redis
             return true;
         }
     },
     refreshExpiringTokens: (objectRepository) => {
-        const { MockCache, authHelpers, jwt } = objectRepository;
+        const { Cache, authHelpers, jwt } = objectRepository;
         return async (refreshToken) => {
-            jwt.verify(refreshToken, "my-very-secret-refresh-key", (err, payload) => {
-                if (err) throw new Error(err);
+            const payload = jwt.verify(refreshToken, "my-very-secret-refresh-key");
+            Cache.destroy(refreshToken); // TODO: change MockCache to Redis
 
-                MockCache.refreshTokens = MockCache.refreshTokens.filter(token => token !== refreshToken); // TODO: change MockCache to Redis
+            const newAccessToken = authHelpers.generateAccessToken(payload);
+            const newRefreshToken = authHelpers.generateRefreshToken(payload);
 
-                const newAccessToken = authHelpers.generateAccessToken(payload);
-                const newRefreshToken = authHelpers.generateRefreshToken(payload);
+            Cache.set(newRefreshToken); // TODO: change MockCache to Redis
 
-                MockCache.refreshTokens.push(newRefreshToken); // TODO: change MockCache to Redis
-
-                return ({ newAccessToken, newRefreshToken });
-            });
+            return ({ newAccessToken, newRefreshToken });
         }
     }
 };

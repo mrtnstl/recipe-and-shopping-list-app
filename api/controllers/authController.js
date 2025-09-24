@@ -1,6 +1,6 @@
 const authController = {
     login: (objectRepository) => {
-        const { MockCache, authService } = objectRepository;
+        const { Cache, authService } = objectRepository;
         return async (req, res, next) => {
             const { username, password } = req.body;
 
@@ -13,7 +13,7 @@ const authController = {
 
                 const accessToken = await authService.getAccessToken(objectRepository)(user);
                 const refreshToken = await authService.getRefreshToken(objectRepository)(user);
-                MockCache.refreshTokens.push(refreshToken); // TODO: change MockCache to Redis
+                Cache.set(refreshToken); // TODO: change MockCache to Redis
 
                 return res.status(200).json({ username: user.name, isAdmin: user.isAdmin, accessToken, refreshToken });
             } catch (err) {
@@ -35,13 +35,13 @@ const authController = {
         }
     },
     refresh: (objectRepository) => {
-        const { MockCache, authService } = objectRepository;
+        const { Cache, authService } = objectRepository;
         return async (req, res, next) => {
             const refreshToken = req.body.token;
             if (!refreshToken) return res.status(401).json({ message: "You aren't authenticated!" });
+            if (!Cache.get(refreshToken)) return res.status(403).json({ message: "Invalid refresh token!" }); // TODO: change MockCache to Redis
 
-            if (!MockCache.refreshTokens.includes(refreshToken)) return res.status(403).json({ message: "Invalid refresh token!" }); // TODO: change MockCache to Redis
-
+            console.log(refreshToken);
             try {
                 const { newAccessToken, newRefreshToken } = await authService.refreshExpiringTokens(objectRepository)(refreshToken);
                 return res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
