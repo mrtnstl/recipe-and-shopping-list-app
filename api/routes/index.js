@@ -2,6 +2,7 @@
 // third party packages
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 // services and repositorys/models
 import recipeService from "../services/recipeService.js";
 import authService from "../services/authService.js";
@@ -25,7 +26,7 @@ import { initHomePageRouter } from "./bff/homePageRoutes.js";
 
 export default function initRoutes(app, pool) {
     const objectRepository = {
-        pool, uuidv4, jwt, verify, Cache, recipeService, authService, userService,
+        pool, uuidv4, jwt, bcrypt, verify, Cache, recipeService, authService, userService,
         authHelpers, userHelpers, ErrorClasses, Users, Recipes
     };
 

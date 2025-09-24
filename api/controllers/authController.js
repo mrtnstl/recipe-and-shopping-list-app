@@ -2,20 +2,25 @@ const authController = {
     login: (objectRepository) => {
         const { Cache, authService } = objectRepository;
         return async (req, res, next) => {
-            const { username, password } = req.body;
+            const { userEmail, password } = req.body;
 
-            if (typeof username === "undefined" || typeof password === "undefined")
+            /* TEST USER
+                "userEmail": "bowsrthelizard@mail.com",
+                "password": "Bowser123!"
+            */
+
+            if (typeof userEmail === "undefined" || typeof password === "undefined")
                 return res.status(400).json({ message: "Bad request!" });
 
             try {
-                const user = await authService.getUser(objectRepository)(username, password);
+                const user = await authService.authenticateUser(objectRepository)(userEmail, password);
                 if (!user) return res.status(400).json({ message: "Invalid login credentials!" });
 
                 const accessToken = await authService.getAccessToken(objectRepository)(user);
                 const refreshToken = await authService.getRefreshToken(objectRepository)(user);
                 Cache.set(refreshToken); // TODO: change MockCache to Redis
 
-                return res.status(200).json({ username: user.name, isAdmin: user.isAdmin, accessToken, refreshToken });
+                return res.status(200).json({ userEmail: user.name, isAdmin: user.isAdmin, accessToken, refreshToken });
             } catch (err) {
                 const statusCode = err.statusCode || 400;
                 return res.status(statusCode).json({ message: err.message });
@@ -41,7 +46,6 @@ const authController = {
             if (!refreshToken) return res.status(401).json({ message: "You aren't authenticated!" });
             if (!Cache.get(refreshToken)) return res.status(403).json({ message: "Invalid refresh token!" }); // TODO: change MockCache to Redis
 
-            console.log(refreshToken);
             try {
                 const { newAccessToken, newRefreshToken } = await authService.refreshExpiringTokens(objectRepository)(refreshToken);
                 return res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });

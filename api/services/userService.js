@@ -1,8 +1,6 @@
-import { genSalt, hash } from "bcrypt";
-
 const userService = {
     createUser: (objectRepository) => {
-        const { Users, userHelpers } = objectRepository;
+        const { Users, userHelpers, bcrypt } = objectRepository;
         return async (userName, userEmail, password, userSex) => {
 
             const userId = userHelpers.generateUserId(); // postgres should generate this uuid!!!
@@ -10,8 +8,8 @@ const userService = {
             const userHandle = userHelpers.generateUserHandle(userName);
             const profilePic = ""; // TODO: user registration should be a two step process
 
-            const passwordSalt = await genSalt(8);
-            const passwordHash = await hash(password, passwordSalt);
+            const passwordSalt = await bcrypt.genSalt(8);
+            const passwordHash = await bcrypt.hash(password, passwordSalt);
 
 
             const newUser = [userName, userHandle, userEmail, userSex, passwordHash, passwordSalt];
@@ -20,18 +18,18 @@ const userService = {
             return user;
         }
     },
-    checkUserCredentials: (objectRepository) => {
+    /*checkUserCredentials: (objectRepository) => {
         const { pool } = objectRepository;
         return async (userEmail, password) => {
             const user = await pool.query("SELECT id, user_name, user_handle, user_email FROM users WHERE user_email = $1", [userEmail]); // TODO: move query into repository layer 
             // TODO: hash and compare supplied pw with pw_hash here
 
         }
-    },
+    },*/
     getUserById: (objectRepository) => {
         const { Users } = objectRepository;
         return async (userId) => {
-            const user = await Users.findById(userId);
+            const user = await Users.findById(objectRepository)(userId);
             return user;
         }
     }

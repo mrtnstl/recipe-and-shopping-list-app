@@ -1,8 +1,16 @@
 const authService = {
-    getUser: (objectRepository) => {
-        const { Users } = objectRepository;
-        return async (username, password) => {
-            const user = await Users.findOne(username, password);
+    authenticateUser: (objectRepository) => {
+        const { Users, bcrypt } = objectRepository;
+        return async (userEmail, password) => {
+            console.log("authService:", userEmail, password);
+            const user = await Users.getUserByEmail(objectRepository)(userEmail);
+            if (!user) return null;
+
+            console.log("authService:", userEmail, password);
+            const pwCheck = await bcrypt.compare(password, user.pw_hash);
+            if (!pwCheck) return null;
+
+            console.log("authService:", userEmail, password);
             return user;
         }
     },
@@ -30,7 +38,7 @@ const authService = {
     refreshExpiringTokens: (objectRepository) => {
         const { Cache, authHelpers, jwt } = objectRepository;
         return async (refreshToken) => {
-            const payload = jwt.verify(refreshToken, "my-very-secret-refresh-key");
+            const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
             Cache.destroy(refreshToken); // TODO: change MockCache to Redis
 
             const newAccessToken = authHelpers.generateAccessToken(payload);

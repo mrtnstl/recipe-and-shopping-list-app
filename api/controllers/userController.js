@@ -27,7 +27,7 @@ const userController = {
             if (typeof userId === "undefined") return res.status(400).json({ message: "Missing parameter!" });
 
             try {
-                const user = await userService.getUserById(userId);
+                const user = await userService.getUserById(objectRepository)(userId);
                 return res.status(200).json(user);
             } catch (err) {
                 const statusCode = err.statusCode || 400; // TODO: custom errors

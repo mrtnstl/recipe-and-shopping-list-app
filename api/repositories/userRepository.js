@@ -1,18 +1,25 @@
-const users = [
-    { id: "1", name: "john", password: "John123", isAdmin: true },
-    { id: "2", name: "jane", password: "Jane123", isAdmin: false },
-];
-
 const Users = {
-    findOne: (username, password) => {
-        return new Promise((resolve, reject) => {
-            resolve(users.find(u => { return u.name === username && u.password === password ? u : null }));
-        });
+    getUserByEmail: (objectRepository) => {
+        const { pool } = objectRepository;
+        return async (userEmail) => {
+            try {
+                const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [userEmail]);
+                return user.rows[0];
+            } catch (err) {
+                throw new Error(err.message);
+            }
+        }
     },
-    findById: (userId) => {
-        return new Promise((resolve, reject) => {
-            resolve(users.find(u => u.id === userId ? u : null));
-        });
+    findById: (objectRepository) => {
+        const { pool } = objectRepository;
+        return async (userId) => {
+            try {
+                const user = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
+                return user.rows[0];
+            } catch (err) {
+                throw new Error(err.message);
+            }
+        }
     },
     insert: (objectRepository) => {
         const { pool } = objectRepository;
