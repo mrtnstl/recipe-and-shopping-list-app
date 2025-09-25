@@ -36,7 +36,6 @@ class RecipeController {
 
             try {
                 const recipes = await recipeService.searchRecipe(objectRepository)(serachTerm);
-                console.log(recipes) // TODO: delete this when not needed
                 return res.status(200).json(recipes);
             } catch (err) {
                 const statusCode = err.statusCode || 400;

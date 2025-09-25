@@ -3,7 +3,7 @@ const Recipes = {
         const { pool } = objectRepository;
         return async (searchTerm) => {
             try {
-                const searchResult = await pool.query("SELECT * FROM recipes WHERE title = $1 ORDER BY created_at DESC;", [searchTerm]); // TODO: rethink this!
+                const searchResult = await pool.query("SELECT *, ts_rank(to_tsvector(title || ' ' || description), websearch_to_tsquery($1)) as rank FROM recipes WHERE to_tsvector(title || ' ' || description) @@ websearch_to_tsquery($1) ORDER BY rank DESC, created_at DESC;", [searchTerm]); // TODO: rethink this!
                 return searchResult.rows;
             } catch (err) {
                 throw new Error(err.message);

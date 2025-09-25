@@ -27,3 +27,10 @@ CREATE TABLE IF NOT EXISTS recipes (
     cooked_count INT DEFAULT NULL,
     execution_step_count SMALLINT DEFAULT NULL
 );
+
+CREATE INDEX recipe_search_idx ON recipes USING GIN (to_tsvector('english', title || ' ' || description));
+/*
+SELECT *, ts_rank(to_tsvector(title || ' ' || description), websearch_to_tsquery('beef')) as rank 
+  FROM recipes WHERE to_tsvector(title || ' ' || description) @@ websearch_to_tsquery('beef') 
+  ORDER BY rank DESC, created_at DESC;
+*/
