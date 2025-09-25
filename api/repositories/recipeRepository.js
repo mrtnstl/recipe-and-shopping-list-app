@@ -43,6 +43,18 @@ const Recipes = {
                 throw new Error(err.message);
             }
         }
+    },
+    findById: (objectRepository) => {
+        const { pool } = objectRepository;
+        return async (recipeId) => {
+            try {
+                const recipe = await pool.query("SELECT * FROM recipes WHERE id = $1", [recipeId]);
+                console.log(recipe.rows[0]); // TODO: delete when not needed
+                return recipe.rows[0];
+            } catch (err) {
+                throw new Error(err.message);
+            }
+        }
     }
 }
 

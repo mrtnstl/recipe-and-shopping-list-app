@@ -69,6 +69,21 @@ class RecipeController {
             }
         }
     }
+    getRecipeById(objectRepository) {
+        const { recipeService } = objectRepository;
+        return async (req, res) => {
+            const { recipeId } = req.params;
+            if (typeof recipeId === "undefined") return res.status(400), json({ message: "Invalid request!" });
+
+            try {
+                const recipe = await recipeService.getRecipeById(objectRepository)(recipeId);
+                return res.status(200).json({ recipe })
+            } catch (err) {
+                console.log(err);
+                return res.send(400).json({ message: err.message });
+            }
+        }
+    }
     createRecipeIngredients(objectRepository) {
         return async (req, res) => { }
     }

@@ -26,5 +26,12 @@ class RecipeService {
             return Recipes.insert(objectRepository)(newRecipe);
         }
     }
+    getRecipeById(objectRepository) {
+        const { Recipes } = objectRepository;
+        return async (recipeId) => {
+            const recipe = await Recipes.findById(objectRepository)(recipeId);
+            return recipe;
+        }
+    }
 }
 export default new RecipeService();
