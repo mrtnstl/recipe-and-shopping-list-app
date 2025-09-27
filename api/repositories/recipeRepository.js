@@ -55,6 +55,17 @@ const Recipes = {
                 throw new Error(err.message);
             }
         }
+    },
+    findByAuthor: (objectRepository) => {
+        const { pool } = objectRepository;
+        return async (userId) => {
+            try {
+                const recipes = await pool.query("SELECT * FROM recipes WHERE user_id = $1", [userId]);
+                return recipes.rows;
+            } catch (err) {
+                throw new Error(err.message);
+            }
+        }
     }
 }
 

@@ -22,6 +22,7 @@ import { initAuthRouter } from "./domain/authRoutes.js";
 import { initUserRouter } from "./domain/userRoutes.js";
 import { initRecipeRouter } from "./domain/recipeRoutes.js";
 import { initHomePageRouter } from "./bff/homePageRoutes.js";
+import { initChefsPageRouter } from "./bff/chefsPageRoutes.js";
 
 export default function initRoutes(app, pool) {
     const objectRepository = {
@@ -34,11 +35,13 @@ export default function initRoutes(app, pool) {
     const recipeRouter = initRecipeRouter(objectRepository);
 
     const homePageRouter = initHomePageRouter(objectRepository);
+    const chefsPageRouter = initChefsPageRouter(objectRepository);
 
     app.use("/api", authRouter);
     app.use("/api", userRouter);
     app.use("/api", recipeRouter);
     app.use("/homepage", homePageRouter);
+    app.use("/chef", chefsPageRouter);
 
     // TODO: add express error mw
 

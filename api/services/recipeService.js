@@ -33,5 +33,12 @@ class RecipeService {
             return recipe;
         }
     }
+    getRecipeByAuthorId(objectRepository) {
+        const { Recipes } = objectRepository;
+        return async (userId) => {
+            const recipes = await Recipes.findByAuthor(objectRepository)(userId);
+            return recipes;
+        }
+    }
 }
 export default new RecipeService();
