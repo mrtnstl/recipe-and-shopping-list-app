@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from "uuid";
+import crypto from "node:crypto";
 
 function generateUserId() { // TODO: func not needed, postgres generates uuids
-    return uuidv4();
+    return crypto.randomUUID();
 }
 function generateUserHandle(userName) {
     const base = userName.toLowerCase();
