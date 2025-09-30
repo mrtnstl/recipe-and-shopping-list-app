@@ -13,7 +13,8 @@ async function refreshAccessToken(refreshToken) {
         const refreshResult = await refreshPromise.json();
 
         return refreshResult;
-    } catch (err) { throw new Error(err.message) } finally { console.log("Refresh finally") };
+    } catch (err) { throw new Error(err.message) }
+    finally { console.log("Refresh finally") };
 }
 
 export async function fetchWithRetry(input, init = {}, oldData, setUser) {
@@ -28,7 +29,7 @@ export async function fetchWithRetry(input, init = {}, oldData, setUser) {
             }
         });
 
-        if (response.status !== 403) return response;
+        if (response.status !== 401) return response; // WARN: changed backend res code to 401, had to be reflected here
 
         // Token lejárt, próbáljuk frissíteni
         const newTokens = await refreshAccessToken(refreshToken);

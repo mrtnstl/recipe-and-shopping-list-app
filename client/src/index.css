@@ -43,14 +43,26 @@
     }
 }
 
-
-
-.menuIcon {
-    @apply fill-customGray
-}
-
 /*motion-safe:animate-color-play*/
 
 a.active {
-    @apply text-customRed
+    @apply text-customRed;
+}
+
+.menuIcon {
+    @apply drop-shadow-xl drop-shadow-transparent duration-[500ms];
+}
+
+.menuIcon:hover,
+.menuIcon:focus-within {
+    @apply drop-shadow-customYellow;
+}
+
+.menuIcon .menuFragment {
+    @apply scale-[1] transition-transform origin-center;
+}
+
+.menuIcon:hover .menuFragment,
+.menuIcon:focus-within .menuFragment {
+    @apply scale-[.9] transition-transform;
 }

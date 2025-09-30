@@ -1,6 +1,6 @@
-export const login = async ({ userName, userPassword }) => {
+export const login = async ({ userEmail, userPassword }) => {
     try {
-        const payload = { username: userName, password: userPassword };
+        const payload = { userEmail: userEmail, password: userPassword };
         const response = await fetch("http://localhost:5000/api/login", {
             method: "post",
             mode: "cors",
