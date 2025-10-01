@@ -1,10 +1,10 @@
 // imports for DI
 // third party packages
-import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 // services and repositorys/models
 import recipeService from "../services/recipeService.js";
+import ingredientService from "../services/ingredientService.js";
 import authService from "../services/authService.js";
 import userService from "../services/userService.js";
 import Users from "../repositories/userRepository.js";
@@ -23,16 +23,21 @@ import { initUserRouter } from "./domain/userRoutes.js";
 import { initRecipeRouter } from "./domain/recipeRoutes.js";
 import { initHomePageRouter } from "./bff/homePageRoutes.js";
 import { initChefsPageRouter } from "./bff/chefsPageRoutes.js";
+import { initIngredientRouter } from "./domain/ingredientRoutes.js";
 
 export default function initRoutes(app, pool) {
     const objectRepository = {
-        pool, uuidv4, jwt, bcrypt, verify, Cache, recipeService, authService, userService,
+        pool, jwt, bcrypt,
+        verify,
+        Cache,
+        recipeService, ingredientService, authService, userService,
         authHelpers, userHelpers, ErrorClasses, Users, Recipes
     };
 
     const authRouter = initAuthRouter(objectRepository);
     const userRouter = initUserRouter(objectRepository);
     const recipeRouter = initRecipeRouter(objectRepository);
+    const ingredientRouter = initIngredientRouter(objectRepository);
 
     const homePageRouter = initHomePageRouter(objectRepository);
     const chefsPageRouter = initChefsPageRouter(objectRepository);
@@ -40,6 +45,7 @@ export default function initRoutes(app, pool) {
     app.use("/api", authRouter);
     app.use("/api", userRouter);
     app.use("/api", recipeRouter);
+    app.use("/api", ingredientRouter);
     app.use("/homepage", homePageRouter);
     app.use("/chef", chefsPageRouter);
 

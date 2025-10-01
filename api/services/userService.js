@@ -3,7 +3,7 @@ const userService = {
         const { Users, userHelpers, bcrypt } = objectRepository;
         return async (userName, userEmail, password, userSex) => {
 
-            const userId = userHelpers.generateUserId(); // postgres should generate this uuid!!!
+            const userId = userHelpers.generateUserId(); // TODO: currently postgres generates this uuid!!!
 
             const userHandle = userHelpers.generateUserHandle(userName);
             const profilePic = ""; // TODO: user registration should be a two step process

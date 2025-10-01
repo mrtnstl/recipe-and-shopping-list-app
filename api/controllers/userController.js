@@ -12,7 +12,7 @@ const userController = {
 
             try {
                 const newUser = await userService.createUser(objectRepository)(userName, userEmail, password, userSex);
-                return res.status(200).json(newUser);
+                return res.status(200).json({ message: "success" });
             } catch (err) {
                 const statusCode = err.statusCode || 400; // TODO: custom errors 
                 return res.status(statusCode).json({ message: err.message });

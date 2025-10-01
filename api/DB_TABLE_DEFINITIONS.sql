@@ -34,3 +34,19 @@ SELECT *, ts_rank(to_tsvector(title || ' ' || description), websearch_to_tsquery
   FROM recipes WHERE to_tsvector(title || ' ' || description) @@ websearch_to_tsquery('beef') 
   ORDER BY rank DESC, created_at DESC;
 */
+
+CREATE TABLE IF NOT EXISTS execution_steps (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    recipe_id TEXT REFERENCES recipes (id), --FK
+    step_num SMALLINT NOT NULL,
+    description TEXT DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS ingredients ( --SEED THIS TABLE!
+    id TEXT PRIMARY KEY,
+    name VARCHAR(40) NOT NULL, --UNIQUE,
+    unit VARCHAR(20) NOT NULL,
+    type VARCHAR(20) NOT NULL
+);
+ALTER TABLE "ingredients"
+ADD CONSTRAINT "ingredients_name_key" UNIQUE ("name");
