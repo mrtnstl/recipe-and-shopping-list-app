@@ -9,6 +9,7 @@ import authService from "../services/authService.js";
 import userService from "../services/userService.js";
 import Users from "../repositories/userRepository.js";
 import Recipes from "../repositories/recipeRepository.js";
+import Ingredients from "../repositories/ingredientRepository.js";
 // middleware
 import { verify } from "../middlewares/authMW.js";
 // cache storage
@@ -16,6 +17,7 @@ import * as Cache from "../services/cache/mockCacheStore.js";
 // helpers
 import authHelpers from "../utils/authHelpers.js";
 import userHelpers from "../utils/userHelpers.js";
+import ingredientHelpers from "../utils/ingredientHelpers.js";
 import ErrorClasses from "../utils/ErrorClasses.js";
 // route initiator functions
 import { initAuthRouter } from "./domain/authRoutes.js";
@@ -31,7 +33,8 @@ export default function initRoutes(app, pool) {
         verify,
         Cache,
         recipeService, ingredientService, authService, userService,
-        authHelpers, userHelpers, ErrorClasses, Users, Recipes
+        authHelpers, userHelpers, ingredientHelpers, ErrorClasses,
+        Users, Recipes, Ingredients
     };
 
     const authRouter = initAuthRouter(objectRepository);
