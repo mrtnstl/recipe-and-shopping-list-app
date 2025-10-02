@@ -4,7 +4,7 @@ class IngredientController {
         return async (req, res) => {
             const limit = parseInt(req.query.limit);
             const page = parseInt(req.query.page);
-            if (typeof limit === "undefined" || typeof page === "undefined") return res.status(400).json({ message: "Malformed request!" });
+            if (Number.isNaN(limit) || Number.isNaN(page)) return res.status(400).json({ message: "Malformed request!" });
             if (limit < 0 || limit > 20) return res.status(400).json({ message: "Limit is out of range!" });
 
             try {
