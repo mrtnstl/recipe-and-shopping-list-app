@@ -38,7 +38,7 @@ class IngredientRepository {
         return async (idsArray, namesArray, unitsArray, typesArray) => {
             try {
                 const result = await pool.query("INSERT INTO ingredients(id, name, unit, type) SELECT * FROM UNNEST ($1::text[], $2::varchar[], $3::varchar[], $4::varchar[]);", [idsArray, namesArray, unitsArray, typesArray]);
-                return true;
+                return true; // TODO: return number of records inserted
             } catch (err) {
                 throw new Error(err.message);
             }

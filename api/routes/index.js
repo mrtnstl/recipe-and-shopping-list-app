@@ -5,11 +5,13 @@ import bcrypt from "bcrypt";
 // services and repositorys/models
 import recipeService from "../services/recipeService.js";
 import ingredientService from "../services/ingredientService.js";
+import recipeIngredientsService from "../services/recipeIngredientsService.js";
 import authService from "../services/authService.js";
 import userService from "../services/userService.js";
 import Users from "../repositories/userRepository.js";
 import Recipes from "../repositories/recipeRepository.js";
 import Ingredients from "../repositories/ingredientRepository.js";
+import RecipeIngredients from "../repositories/recipeIngredientsRepository.js";
 // middleware
 import { verify } from "../middlewares/authMW.js";
 // cache storage
@@ -26,21 +28,23 @@ import { initRecipeRouter } from "./domain/recipeRoutes.js";
 import { initHomePageRouter } from "./bff/homePageRoutes.js";
 import { initChefsPageRouter } from "./bff/chefsPageRoutes.js";
 import { initIngredientRouter } from "./domain/ingredientRoutes.js";
+import { initRecipeIngredientsRouter } from "./domain/recipeIngredientsRoutes.js";
 
 export default function initRoutes(app, pool) {
     const objectRepository = {
         pool, jwt, bcrypt,
         verify,
         Cache,
-        recipeService, ingredientService, authService, userService,
+        recipeService, ingredientService, authService, userService, recipeIngredientsService,
         authHelpers, userHelpers, ingredientHelpers, ErrorClasses,
-        Users, Recipes, Ingredients
+        Users, Recipes, Ingredients, RecipeIngredients
     };
 
     const authRouter = initAuthRouter(objectRepository);
     const userRouter = initUserRouter(objectRepository);
     const recipeRouter = initRecipeRouter(objectRepository);
     const ingredientRouter = initIngredientRouter(objectRepository);
+    const recipeIngredientsRouter = initRecipeIngredientsRouter(objectRepository);
 
     const homePageRouter = initHomePageRouter(objectRepository);
     const chefsPageRouter = initChefsPageRouter(objectRepository);
@@ -49,6 +53,7 @@ export default function initRoutes(app, pool) {
     app.use("/api", userRouter);
     app.use("/api", recipeRouter);
     app.use("/api", ingredientRouter);
+    app.use("/api", recipeIngredientsRouter);
     app.use("/homepage", homePageRouter);
     app.use("/chef", chefsPageRouter);
 

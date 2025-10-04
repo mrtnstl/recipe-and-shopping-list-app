@@ -51,11 +51,7 @@ class IngredientService {
     updateIngredient(objectRepository) {
         const { Ingredients } = objectRepository;
         return async (ingredientId, ingredientData) => {
-
-            const withId = (id, obj) => { return { id: id, ...obj } }; // TODO: remove hof, just pass arguments to update func
-            const hydratedIngredientData = withId(ingredientId, ingredientData);
-
-            const updateIngredient = await Ingredients.updateWhereId(objectRepository)(hydratedIngredientData);
+            const updateIngredient = await Ingredients.updateWhereId(objectRepository)({ id: ingredientId, ...ingredientData });
             if (updateIngredient.rowCount === 0) throw new Error("No Record Affected!");
 
             return updateIngredient.rows[0].id;
