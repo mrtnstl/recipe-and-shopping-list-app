@@ -19,8 +19,10 @@ class IngredientController {
     createIngredients(objectRepository) {
         const { ingredientService } = objectRepository;
         return async (req, res) => {
+            if (typeof req.body === "undefined" || typeof req.body.ingredients === "undefined")
+                return res.status(400).json({ message: "Malformed request!" });
             const { ingredients } = req.body;
-            if (typeof ingredients === "undefined") return res.status(400).json({ message: "Missing request body!" });
+
             try {
                 const newIngredients = await ingredientService.createIngredients(objectRepository)(ingredients);
                 return res.status(200).json({ message: "Ingredient(s) created successfully!" });
@@ -33,8 +35,43 @@ class IngredientController {
         const { ingredientService } = objectRepository;
         return async (req, res) => {
             const { ingredientId } = req.params;
-            // TODO: get ingr. by id
-            return true;
+            if (typeof ingredientId === "undefined") return res.status(400).json({ message: "Malformed request!" }); // TODO: this guard might not be neccessary
+
+            try {
+                const ingredient = await ingredientService.getIngredientById(objectRepository)(ingredientId);
+                return res.status(200).json(ingredient);
+            } catch (err) {
+                return res.status(400).json({ message: err.message });
+            }
+        }
+    }
+    modifyIngredient(objectRepository) {
+        const { ingredientService } = objectRepository;
+        return async (req, res) => {
+            const { ingredientId } = req.params;
+            if (typeof req.body === "undefined" || typeof req.body.ingredientData === "undefined")
+                return res.status(200).json({ message: "Malformed request!" });
+            const { ingredientData } = req.body;
+
+            try {
+                const updatedIngredient = await ingredientService.updateIngredient(objectRepository)(ingredientId, ingredientData);
+                return res.status(200).json({ message: `Ingredient updated (id: ${updatedIngredient})!` });
+            } catch (err) {
+                return res.status(200).json({ message: err.message });
+            }
+        }
+    }
+    deleteIngredient(objectRepository) {
+        const { ingredientService } = objectRepository;
+        return async (req, res) => {
+            const { ingredientId } = req.params; // TODO: check for undefined? 
+
+            try {
+                const deletedIngredient = await ingredientService.deleteIngredient(objectRepository)(ingredientId);
+                return res.status(200).json({ message: `Ingredient deleted (id: ${deletedIngredient})!` });
+            } catch (err) {
+                return res.status(200).json({ message: err.message });
+            }
         }
     }
     searchIngredient(objectRepository) {
@@ -49,7 +86,12 @@ class IngredientController {
         const { ingredientService } = objectRepository;
         return async (req, res) => {
             // TODO: get ingredient count(cache value in future)
-            return true;
+            try {
+                const ingredientCount = await ingredientService.getCount(objectRepository)();
+                return res.status(200).json({ ingredientCount });
+            } catch (err) {
+                return res.status(400).json({ message: err.message });
+            }
         }
     }
 }

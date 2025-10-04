@@ -45,12 +45,23 @@ class IngredientRepository {
         }
 
     }
-    deleteOneById(objectRepository) {
+    updateWhereId(objectRepository) {
+        const { pool } = objectRepository;
+        return async (ingredientData) => {
+            try {
+                const result = await pool.query("UPDATE ingredients SET name = $2, unit = $3, type = $4 WHERE id = $1 RETURNING id;", [ingredientData.id, ingredientData.ingredientName, ingredientData.unit, ingredientData.ingredientType]);
+                return result;
+            } catch (err) {
+                throw new Error(err.message);
+            }
+        }
+    }
+    deleteOneWhereId(objectRepository) {
         const { pool } = objectRepository;
         return async (id) => {
             try {
-                const result = await pool.query("DELETE FROM ingredients WHERE id = $1 RETURNING name;", [id]);
-                return result.rows[0];
+                const result = await pool.query("DELETE FROM ingredients WHERE id = $1 RETURNING id;", [id]);
+                return result;
             } catch (err) {
                 throw new Error(err.message);
             }
@@ -61,7 +72,7 @@ class IngredientRepository {
         return async () => {
             try {
                 const result = await pool.query("SELECT COUNT(*) FROM ingredients;");
-                return result.rows[0].count;
+                return result;
             } catch (err) {
                 throw new Error(err.message);
             }
