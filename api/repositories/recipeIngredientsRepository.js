@@ -4,7 +4,7 @@ class RecipeIngredientsRepository {
         return async (recipeIngredient) => {
             try {
                 const result = await pool.query(
-                    "INSERT INTO recipe_ingredients(recipe_id, ingredient_id, quantity) VALUES ($1, $2, $3) RETURNING COUNT(*)",
+                    "INSERT INTO recipe_ingredients(recipe_id, ingredient_id, quantity) VALUES ($1, $2, $3);",
                     [recipeIngredient.recipeId, recipeIngredient.ingredientId, recipeIngredient.quantity]
                 );
                 console.log(result)
@@ -19,7 +19,7 @@ class RecipeIngredientsRepository {
         return async (recipeId, ingredientIdsArray, quantitysArray) => {
             try {
                 const result = await pool.query(
-                    "INSERT INTO recipe_ingredients(recipe_id, ingredient_id, quantity) SELECT * FROM UNNEST($1, $2::text[], $3::smallint[]) RETURNING COUNT(*)",
+                    "INSERT INTO recipe_ingredients(recipe_id, ingredient_id, quantity) SELECT * FROM UNNEST($1, $2::text[], $3::smallint[]) RETURNING COUNT(*);",
                     [recipeId, ingredientIdsArray, quantitysArray]
                 );
                 console.log(result)
@@ -55,7 +55,7 @@ class RecipeIngredientsRepository {
         return async (recipeId, ingredientId, newQuantity) => {
             try {
                 const result = await pool.query(
-                    "UPDATE recipe_ingredients SET quantity = $3 WHERE recipe_id = $1 AND ingredient_id = $2",
+                    "UPDATE recipe_ingredients SET quantity = $3 WHERE recipe_id = $1 AND ingredient_id = $2;",
                     [recipeId, ingredientId, newQuantity]
                 );
                 return result;
@@ -69,7 +69,7 @@ class RecipeIngredientsRepository {
         return async (recipeId, ingredientId) => {
             try {
                 const result = await pool.query(
-                    "DELETE FROM recipe_ingredients WHERE recipe_id = $1 AND ingredient_id = $2;",
+                    "DELETE FROM recipe_ingredients WHERE recipe_id = $1 AND ingredient_id = $2 RETURNING (SELECT name FROM ingredients WHERE id = $2);",
                     [recipeId, ingredientId]
                 );
                 return result;

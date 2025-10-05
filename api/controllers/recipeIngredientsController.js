@@ -11,8 +11,7 @@ class RecipeIngredientsController {
 
             try {
                 const newRecipesCount = await recipeIngredientsService.createRecipeIngredients(objectRepository)(recipeId, recipeIngredients);
-                console.log("COUNT:", newRecipesCount);
-                return res.status(200).json(newRecipesCount);// return added recipes count
+                return res.status(200).json({ message: `${newRecipesCount} recipe(s) added` });
             } catch (err) {
                 return res.status(400).json({ message: err.message });
             }
@@ -33,14 +32,21 @@ class RecipeIngredientsController {
             }
         }
     }
-    // update ingredients quality in recipe
+    // update ingredients quantity in recipe
     modifyRecipeIngredient(objectRepository) {
         const { recipeIngredientsService } = objectRepository;
         return async (req, res) => {
             const { recipeId, ingredientId } = req.params;
-            if (recipeId === undefined || ingredientId === undefined) return res.status(400).json({ message: "Malformed Request!" });
-            // TODO
-            return true;
+            const { newQuantity } = req.body;
+            if (typeof recipeId === "undefined" || typeof ingredientId === "undefined" || typeof req.body === "undefined")
+                return res.status(400).json({ message: "Malformed Request!" });
+
+            try {
+                const updatedRecipeCount = await recipeIngredientsService.modifyRecipeIngredient(objectRepository)(recipeId, ingredientId, newQuantity);
+                return res.status(200).json({ message: `Updated ${updatedRecipeCount} Rows!` });
+            } catch (err) {
+                return res.status(400).json({ message: err.message });
+            }
         }
     }
     // delete ingredient from recipe
@@ -48,9 +54,15 @@ class RecipeIngredientsController {
         const { recipeIngredientsService } = objectRepository;
         return async (req, res) => {
             const { recipeId, ingredientId } = req.params;
-            if (recipeId === undefined || ingredientId === undefined) return res.status(400).json({ message: "Malformed Request!" });
-            // TODO
-            return true;
+            if (recipeId === undefined || ingredientId === undefined)
+                return res.status(400).json({ message: "Malformed Request!" });
+
+            try {
+                const removedRecipeIngredientName = await recipeIngredientsService.removeRecipeIngredient(objectRepository)(recipeId, ingredientId);
+                return res.status(200).json({ message: `${removedRecipeIngredientName} were deleted!` });
+            } catch (err) {
+                return res.status(400).json({ message: err.message });
+            }
         }
     }
 }
