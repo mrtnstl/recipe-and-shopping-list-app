@@ -1,13 +1,12 @@
-// TODO: recipe-ingredients create, update and delete functionality will need a way to determine if given recipe belongs to the authenticated user!!
 class RecipeIngredientsController {
     // add new ingredient to recipe
     addRecipeIngredient(objectRepository) {
         const { recipeIngredientsService } = objectRepository;
         return async (req, res) => {
-            if (typeof req.params.recipeId === "undefined" || typeof req.body === "undefined" || typeof req.body.recipeIngredients === "undefined")
-                return res.status(400).json({ message: "Malformed Request!" });
             const { recipeId } = req.params;
             const { recipeIngredients } = req.body;
+            if (typeof recipeId === "undefined" || typeof recipeIngredients === "undefined")
+                return res.status(400).json({ message: "Malformed Request!" });
 
             try {
                 const newRecipesCount = await recipeIngredientsService.createRecipeIngredients(objectRepository)(recipeId, recipeIngredients);
@@ -21,8 +20,8 @@ class RecipeIngredientsController {
     getRecipeIngredient(objectRepository) {
         const { recipeIngredientsService } = objectRepository;
         return async (req, res) => {
-            if (req.params.recipeId === undefined) return res.status(400).json({ message: "Malformed Request!" });
             const { recipeId } = req.params;
+            if (typeof recipeId === "undefined") return res.status(400).json({ message: "Malformed Request!" });
 
             try {
                 const recipeIngredients = await recipeIngredientsService.getRecipeIngredients(objectRepository)(recipeId);
@@ -54,7 +53,7 @@ class RecipeIngredientsController {
         const { recipeIngredientsService } = objectRepository;
         return async (req, res) => {
             const { recipeId, ingredientId } = req.params;
-            if (recipeId === undefined || ingredientId === undefined)
+            if (typeof recipeId === "undefined" || typeof ingredientId === "undefined")
                 return res.status(400).json({ message: "Malformed Request!" });
 
             try {

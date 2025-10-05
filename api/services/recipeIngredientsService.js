@@ -9,7 +9,7 @@ class RecipeIngredientsService {
                     quantitysArray.push(item.quantity);
                 })
                 const insertedRecipeIngredients = await RecipeIngredients.insertMany(objectRepository)(recipeId, ingredientIdsArray, quantitysArray);
-                return insertedRecipeIngredients.rows[0].count;
+                return insertedRecipeIngredients.rowCount;
             } else {
                 const { ingredientId, quantity } = recipeIngredients[0];
                 const assembledRecIng = { recipeId, ingredientId, quantity };

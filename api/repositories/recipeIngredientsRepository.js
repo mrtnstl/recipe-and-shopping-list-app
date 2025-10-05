@@ -19,7 +19,7 @@ class RecipeIngredientsRepository {
         return async (recipeId, ingredientIdsArray, quantitysArray) => {
             try {
                 const result = await pool.query(
-                    "INSERT INTO recipe_ingredients(recipe_id, ingredient_id, quantity) SELECT * FROM UNNEST($1, $2::text[], $3::smallint[]) RETURNING COUNT(*);",
+                    "INSERT INTO recipe_ingredients(recipe_id, ingredient_id, quantity) SELECT * FROM UNNEST($1, $2::text[], $3::smallint[]);",
                     [recipeId, ingredientIdsArray, quantitysArray]
                 );
                 console.log(result)
