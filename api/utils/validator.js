@@ -17,6 +17,10 @@ class InputValidator {
         if (typeof input !== "number" || typeof gt !== "number" || typeof lt !== "number") return false;
         return Number.isInteger(input) && (input > gt && input < lt);
     }
+    isArrayAndIsLength(input, { min = -1, max = Infinity } = {}) {
+        return Array.isArray(input) && (input.length >= min && input.length <= max);
+    }
+    isNumber(input) { return typeof input === "number" }
     // TODO: replace validator pkgs simpler methods in the future
     isEmail(input) { return validator.isEmail(input) }
     hasLettersOnly(input) { return validator.isAlpha(input) }
@@ -25,8 +29,9 @@ class InputValidator {
     isJWT(input) { return validator.isJWT(input) }
 }
 class InputSanitizer {
-    trim(input) { return input.trim() }
-
+    trimString(input) { return input.trim() }
+    escape(input) { return validator.escape(input) }
+    stripLow(input) { return validator.stripLow(input, false) }
+    normalizeEmail(input) { return validator.normalizeEmail(input) }
 }
-
-export default { InputValidator, InputSanitizer }
+export { InputValidator, InputSanitizer, SchemaValidator };

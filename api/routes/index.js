@@ -21,6 +21,7 @@ import authHelpers from "../utils/authHelpers.js";
 import userHelpers from "../utils/userHelpers.js";
 import ingredientHelpers from "../utils/ingredientHelpers.js";
 import ErrorClasses from "../utils/ErrorClasses.js";
+import { InputValidator, InputSanitizer } from "../utils/validator.js";
 // route initiator functions
 import { initAuthRouter } from "./domain/authRoutes.js";
 import { initUserRouter } from "./domain/userRoutes.js";
@@ -31,12 +32,15 @@ import { initIngredientRouter } from "./domain/ingredientRoutes.js";
 import { initRecipeIngredientsRouter } from "./domain/recipeIngredientsRoutes.js";
 
 export default function initRoutes(app, pool) {
+    const inputValidator = new InputValidator();
+    const inputSanitizer = new InputSanitizer();
+
     const objectRepository = {
         pool, jwt, bcrypt,
         verify,
         Cache,
         recipeService, ingredientService, authService, userService, recipeIngredientsService,
-        authHelpers, userHelpers, ingredientHelpers, ErrorClasses,
+        authHelpers, userHelpers, ingredientHelpers, ErrorClasses, inputValidator, inputSanitizer,
         Users, Recipes, Ingredients, RecipeIngredients
     };
 
