@@ -34,4 +34,4 @@ class InputSanitizer {
     stripLow(input) { return validator.stripLow(input, false) }
     normalizeEmail(input) { return validator.normalizeEmail(input) }
 }
-export { InputValidator, InputSanitizer, SchemaValidator };
+export { InputValidator, InputSanitizer };

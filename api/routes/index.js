@@ -6,12 +6,14 @@ import bcrypt from "bcrypt";
 import recipeService from "../services/recipeService.js";
 import ingredientService from "../services/ingredientService.js";
 import recipeIngredientsService from "../services/recipeIngredientsService.js";
+import recipeExecutionStepsService from "../services/recipeExecutionStepsService.js";
 import authService from "../services/authService.js";
 import userService from "../services/userService.js";
 import Users from "../repositories/userRepository.js";
 import Recipes from "../repositories/recipeRepository.js";
 import Ingredients from "../repositories/ingredientRepository.js";
 import RecipeIngredients from "../repositories/recipeIngredientsRepository.js";
+import ExecutionSteps from "../repositories/recipeExecutionStepsRepository.js";
 // middleware
 import { verify } from "../middlewares/authMW.js";
 // cache storage
@@ -30,6 +32,7 @@ import { initHomePageRouter } from "./bff/homePageRoutes.js";
 import { initChefsPageRouter } from "./bff/chefsPageRoutes.js";
 import { initIngredientRouter } from "./domain/ingredientRoutes.js";
 import { initRecipeIngredientsRouter } from "./domain/recipeIngredientsRoutes.js";
+import { initRecipeExecutionStepsRouter } from "./domain/recipeExecutionStepsRoutes.js";
 
 export default function initRoutes(app, pool) {
     const inputValidator = new InputValidator();
@@ -39,9 +42,9 @@ export default function initRoutes(app, pool) {
         pool, jwt, bcrypt,
         verify,
         Cache,
-        recipeService, ingredientService, authService, userService, recipeIngredientsService,
+        recipeService, ingredientService, authService, userService, recipeIngredientsService, recipeExecutionStepsService,
         authHelpers, userHelpers, ingredientHelpers, ErrorClasses, inputValidator, inputSanitizer,
-        Users, Recipes, Ingredients, RecipeIngredients
+        Users, Recipes, Ingredients, RecipeIngredients, ExecutionSteps
     };
 
     const authRouter = initAuthRouter(objectRepository);
@@ -49,6 +52,7 @@ export default function initRoutes(app, pool) {
     const recipeRouter = initRecipeRouter(objectRepository);
     const ingredientRouter = initIngredientRouter(objectRepository);
     const recipeIngredientsRouter = initRecipeIngredientsRouter(objectRepository);
+    const recipeExecutionStepsRouter = initRecipeExecutionStepsRouter(objectRepository);
 
     const homePageRouter = initHomePageRouter(objectRepository);
     const chefsPageRouter = initChefsPageRouter(objectRepository);
@@ -58,6 +62,8 @@ export default function initRoutes(app, pool) {
     app.use("/api", recipeRouter);
     app.use("/api", ingredientRouter);
     app.use("/api", recipeIngredientsRouter);
+    app.use("/api", recipeExecutionStepsRouter);
+
     app.use("/homepage", homePageRouter);
     app.use("/chef", chefsPageRouter);
 

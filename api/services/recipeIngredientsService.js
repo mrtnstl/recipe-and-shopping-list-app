@@ -32,7 +32,7 @@ class RecipeIngredientsService {
         const { RecipeIngredients } = objectRepository;
         return async (recipeId, ingredientId, newQuantity) => {
             const updatedRecipeIngredient = await RecipeIngredients.updateWhereId(objectRepository)(recipeId, ingredientId, newQuantity);
-            if (updatedRecipeIngredient.rowCount < 1) throw new Error("No Rows Were Affected By Update!");
+            if (updatedRecipeIngredient.rowCount < 1) throw new Error("No Rows Were Updated!");
             return updatedRecipeIngredient.rowCount;
         }
     }

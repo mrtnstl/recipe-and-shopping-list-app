@@ -51,7 +51,7 @@ class RecipeIngredientsController {
             const { recipeId, ingredientId } = req.params;
             const { newQuantity } = req.body ?? {};
 
-            if (isUndefined(recipeId) || isUndefined(ingredientId) || isUndefined(req.body) || isUndefined(newQuantity))
+            if (isUndefined(recipeId) || isUndefined(ingredientId) || isUndefined(newQuantity))
                 return res.status(400).json({ message: "Invalid Request!" });
 
             if (!isNumber(newQuantity))
