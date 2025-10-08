@@ -57,6 +57,7 @@ class RecipeController {
 
             const authorId = "ma6666";// TODO: authorId = req.user.id;
 
+            // TODO: validate newrecipe object here
             const data = [recipeId, recipeName, authorId, recipeDescription, minutesNeeded];
 
             try {
@@ -83,12 +84,5 @@ class RecipeController {
             }
         }
     }
-    createRecipeIngredients(objectRepository) {
-        return async (req, res) => { }
-    }
-    createExecutionSteps(objectRepository) {
-        return async (req, res) => { }
-    }
-
 }
 export default new RecipeController();

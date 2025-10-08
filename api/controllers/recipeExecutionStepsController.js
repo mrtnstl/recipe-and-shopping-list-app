@@ -60,7 +60,7 @@ class RecipeExecutionStepsController {
             // TODO: check if typeof newDesc === "string"
 
             try {
-                const updatedExecStepCount = await recipeExecutionStepsService.modifyExeceStep(objectRepository)(recipeId, execStepId, newStepNum, newDesc);
+                const updatedExecStepCount = await recipeExecutionStepsService.modifyExecStep(objectRepository)(recipeId, execStepId, newStepNum, newDesc);
                 return res.status(200).json({ message: `Updated ${updatedExecStepCount} Rows!` });
             } catch (err) {
                 return res.status(400).json({ message: err.message });

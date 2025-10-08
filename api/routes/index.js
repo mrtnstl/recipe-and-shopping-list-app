@@ -2,6 +2,7 @@
 // third party packages
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import Joi from "joi";
 // services and repositorys/models
 import recipeService from "../services/recipeService.js";
 import ingredientService from "../services/ingredientService.js";
@@ -39,7 +40,7 @@ export default function initRoutes(app, pool) {
     const inputSanitizer = new InputSanitizer();
 
     const objectRepository = {
-        pool, jwt, bcrypt,
+        pool, jwt, bcrypt, Joi,
         verify,
         Cache,
         recipeService, ingredientService, authService, userService, recipeIngredientsService, recipeExecutionStepsService,

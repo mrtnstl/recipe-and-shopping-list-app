@@ -26,7 +26,7 @@ class RecipeExecutionStepsService {
             return execSteps.rows;
         }
     }
-    modifyExeceStep(objectRepository) {
+    modifyExecStep(objectRepository) {
         const { ExecutionSteps } = objectRepository;
         return async (recipeId, execStepId, newStepNum, newDesc) => {
             const updatedExecStep = await ExecutionSteps.updateWhereId(objectRepository)(recipeId, execStepId, newStepNum, newDesc);
