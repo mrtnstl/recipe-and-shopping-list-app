@@ -25,6 +25,10 @@ import userHelpers from "../utils/userHelpers.js";
 import ingredientHelpers from "../utils/ingredientHelpers.js";
 import ErrorClasses from "../utils/ErrorClasses.js";
 import { InputValidator, InputSanitizer } from "../utils/validator.js";
+// validation schemas
+import { userSchema, authSchema } from "../schema/userSchema.js";
+import { recipeSchema, recipeIngredientSchema, executionStepSchema } from "../schema/recipeSchema.js";
+import { ingredientSchema } from "../schema/ingredientSchema.js";
 // route initiator functions
 import { initAuthRouter } from "./domain/authRoutes.js";
 import { initUserRouter } from "./domain/userRoutes.js";
@@ -45,6 +49,7 @@ export default function initRoutes(app, pool) {
         Cache,
         recipeService, ingredientService, authService, userService, recipeIngredientsService, recipeExecutionStepsService,
         authHelpers, userHelpers, ingredientHelpers, ErrorClasses, inputValidator, inputSanitizer,
+        userSchema, authSchema, recipeSchema, recipeIngredientSchema, executionStepSchema, ingredientSchema,
         Users, Recipes, Ingredients, RecipeIngredients, ExecutionSteps
     };
 

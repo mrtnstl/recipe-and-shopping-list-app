@@ -29,18 +29,16 @@ export const userSchema = Joi.object({
     password: passwordSchema,
     userSex: Joi.string().valid(USR_SX.A, USR_SX.B, USR_SX.C).required()
 });
+export const authSchema = Joi.object({
+    userEmail: Joi.string().email().required(),
+    password: Joi.string().required()
+});
 // TODO:
-export const authSchema = Joi.object({});
 export const roleSchema = Joi.object({});
 export const permissionSchema = Joi.object({});
 
 /*
-const mockInput = {
-    userName: "bwsr123",
-    userEmail: "bowser@mail.xyz",
-    password: "asGddd523?as",
-    userSex: "male"
-}
+const mockInput = {};
 const { error, value } = userSchema.validate(mockInput);
 
 if (!error) console.log(value);

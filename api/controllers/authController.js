@@ -1,9 +1,8 @@
 const authController = {
     login: (objectRepository) => {
-        const { Cache, authService } = objectRepository;
+        const { Cache, authService, authSchema } = objectRepository;
         return async (req, res, next) => {
-            const { userEmail, password } = req.body;
-
+            const { userEmail, password } = req.body ?? {};
             /* TEST USER
                 "userEmail": "bowsrthelizard@mail.com",
                 "password": "Bowser123!"
@@ -11,6 +10,9 @@ const authController = {
 
             if (typeof userEmail === "undefined" || typeof password === "undefined")
                 return res.status(400).json({ message: "Bad request!" });
+
+            const { error } = authSchema.validate({ userEmail, password });
+            if (error) return res.status(422).json({ message: error.message }); // TODO: custom error for "Unprocessable Entity"
 
             try {
                 const user = await authService.authenticateUser(objectRepository)(userEmail, password);
@@ -30,7 +32,7 @@ const authController = {
     logout: (objectRepository) => {
         const { authService } = objectRepository;
         return async (req, res, next) => {
-            const refreshToken = req.body.token;
+            const refreshToken = req.body.token ?? undefined;
             if (typeof refreshToken === "undefined") return res.status(400).json({ message: "Missing refresh token!" });
 
             const destroyToken = await authService.destroyRefreshToken(objectRepository)(refreshToken);
@@ -42,7 +44,7 @@ const authController = {
     refresh: (objectRepository) => {
         const { Cache, authService } = objectRepository;
         return async (req, res, next) => {
-            const refreshToken = req.body.token;
+            const refreshToken = req.body.token ?? undefined;
             if (!refreshToken) return res.status(401).json({ message: "You aren't authenticated!" });
             if (!Cache.get(refreshToken)) return res.status(403).json({ message: "Invalid refresh token!" }); // TODO: change MockCache to Redis
 
