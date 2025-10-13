@@ -44,20 +44,32 @@ class RecipeController {
         }
     }
     createRecipe(objectRepository) {
-        const { recipeService } = objectRepository;
+        const { recipeService, recipeSchema } = objectRepository;
         return async (req, res) => {
-            const { recipeName, recipeDescription, minutesNeeded } = req.body;
+            const { recipeName, recipeDescription, minutesNeeded } = req.body ?? {};
 
             if (typeof recipeName === "undefined" ||
                 typeof recipeDescription === "undefined" ||
                 typeof minutesNeeded === "undefined")
-                return res.send(400).json({ message: "Missing recipe parameter(s)!" });
+                return res.status(400).json({ message: "Invalid Request!" });
+
+            if (typeof recipeName[0] === "undefined" || typeof recipeName[1] === "undefined")
+                return res.status(422).json({ message: "Invalid Request" });
 
             const recipeId = recipeName[0].toLowerCase() + recipeName[1].toLowerCase() + Math.floor((Math.random() * 100000));
 
             const authorId = "ma6666";// TODO: authorId = req.user.id;
 
-            // TODO: validate newrecipe object here
+            const { error } = recipeSchema.validate({
+                recipeId,
+                authorId,
+                recipeName,
+                recipeDescription,
+                minutesNeeded
+            });
+            if (error) return res.status(422).json({ message: error.message });
+
+            // TODO: pass object instead of array
             const data = [recipeId, recipeName, authorId, recipeDescription, minutesNeeded];
 
             try {
@@ -84,5 +96,6 @@ class RecipeController {
             }
         }
     }
+    // TODO: anonimize recipe(soft delete recipe) and delete recipe method
 }
 export default new RecipeController();
