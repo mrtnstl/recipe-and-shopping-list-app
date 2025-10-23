@@ -34,7 +34,7 @@ export const recipeIngredientSchema = Joi.array().min(1).max(50).items(
 );
 export const executionStepSchema = Joi.array().min(EXEC_STEP_ARRAY_MIN_L).max(EXEC_STEP_ARRAY_MAX_L).items(
     Joi.object({
-        recipeId: Joi.string().required(),
+        // recipeId: Joi.string().required(),
         stepNum: Joi.number().min(EXEC_STEP_NUM_MIN).max(EXEC_STEP_NUM_MAX).required(),
         description: Joi.string().min(EXEC_STEP_DESC_MIN).max(EXEC_STEP_DESC_MAX).required()
     })

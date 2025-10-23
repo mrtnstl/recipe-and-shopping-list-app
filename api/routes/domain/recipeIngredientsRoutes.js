@@ -1,19 +1,20 @@
 import express from "express";
 import recipeIngredientsController from "../../controllers/recipeIngredientsController.js";
 export function initRecipeIngredientsRouter(objectRepository) {
+    const { addRecipeIngredient, getRecipeIngredient, modifyRecipeIngredient, removeRecipeIngredient } = recipeIngredientsController;
     const recipeIngredientsRouter = express.Router();
 
     recipeIngredientsRouter.post("/recipe-ingredients/:recipeId",
         /* TODO: check permissions */
-        recipeIngredientsController.addRecipeIngredient(objectRepository));
+        addRecipeIngredient(objectRepository));
     recipeIngredientsRouter.get("/recipe-ingredients/:recipeId",
-        recipeIngredientsController.getRecipeIngredient(objectRepository));
+        getRecipeIngredient(objectRepository));
     recipeIngredientsRouter.put("/recipe-ingredients/:recipeId", // /:ingredientId
         /* TODO: check permissions */
-        recipeIngredientsController.modifyRecipeIngredient(objectRepository));
+        modifyRecipeIngredient(objectRepository));
     recipeIngredientsRouter.delete("/recipe-ingredients/:recipeId/:ingredientId",
         /* TODO: check permissions */
-        recipeIngredientsController.removeRecipeIngredient(objectRepository));
+        removeRecipeIngredient(objectRepository));
 
     return recipeIngredientsRouter;
 }

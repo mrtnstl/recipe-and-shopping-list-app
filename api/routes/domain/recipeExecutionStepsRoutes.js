@@ -2,19 +2,24 @@
 import express from "express";
 import recipeExecutionStepsController from "../../controllers/recipeExecutionStepsController.js";
 export function initRecipeExecutionStepsRouter(objectRepository) {
+    const { addExecSteps, getExecSteps, modifyExecSteps, removeExecSteps } = recipeExecutionStepsController;
     const recipeExecutionStepsRouter = express.Router();
 
     recipeExecutionStepsRouter.post("/exec-steps/:recipeId",
         /* TODO: check permissions */
-        recipeExecutionStepsController.addExecSteps(objectRepository));
+        (req, res, next) => {
+            console.log(JSON.stringify(req.body))
+            next();
+        },
+        addExecSteps(objectRepository));
     recipeExecutionStepsRouter.get("/exec-steps/:recipeId",
-        recipeExecutionStepsController.getExecSteps(objectRepository));
+        getExecSteps(objectRepository));
     recipeExecutionStepsRouter.put("/exec-steps/:recipeId/:execStepId",
         /* TODO: check permissions */
-        recipeExecutionStepsController.modifyExecSteps(objectRepository));
+        modifyExecSteps(objectRepository));
     recipeExecutionStepsRouter.delete("/exec-steps/:recipeId/:execStepId",
         /* TODO: check permissions */
-        recipeExecutionStepsController.removeExecSteps(objectRepository));
+        removeExecSteps(objectRepository));
 
     return recipeExecutionStepsRouter;
 }

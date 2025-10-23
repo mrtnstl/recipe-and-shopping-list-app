@@ -7,9 +7,13 @@ export function initAuthRouter(objectRepository) {
 
     const authRouter = express.Router();
 
-    authRouter.post("/login", login(objectRepository));
-    authRouter.post("/logout", verify, logout(objectRepository));
-    authRouter.post("/refresh", refresh(objectRepository));
+    authRouter.post("/login",
+        login(objectRepository));
+    authRouter.post("/logout",
+        verify,
+        logout(objectRepository));
+    authRouter.post("/refresh",
+        refresh(objectRepository));
 
     return authRouter;
 }

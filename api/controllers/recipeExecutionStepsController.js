@@ -1,21 +1,18 @@
 class RecipeExecutionStepsController {
     // add new execution step(s) to recipe
     addExecSteps(objectRepository) {
-        const { recipeExecutionStepsService, inputValidator } = objectRepository;
+        const { recipeExecutionStepsService, inputValidator, executionStepSchema } = objectRepository;
         return async (req, res) => {
-            const { isUndefined, isArrayAndIsLength } = inputValidator;
-
+            const { isUndefined } = inputValidator;
             const { recipeId } = req.params;
             const { recipeExecSteps } = req.body ?? {};
 
-            if (isUndefined(recipeId) || isUndefined(recipeExecSteps))
+            if (isUndefined(recipeId))
                 return res.status(400).json({ message: "Invalid Request!" });
-            // TODO: separate array type check and length checks in validator.js
-            if (!isArrayAndIsLength(recipeExecSteps, { max: 50 })) // TODO: count constraints should be implemented on the frontend
-                return res.status(400).json({ message: "'recipeExecSteps' should be an array containing 50 items maximum!" });
 
-            if (!isArrayAndIsLength(recipeExecSteps, { min: 1 }))
-                return res.status(400).json({ message: "'recipeExecSteps' should be an array containing 1 item minimum!" });
+            const { error } = executionStepSchema.validate(recipeExecSteps);
+            if (error)
+                return res.status(422).json({ message: error.message });
 
             try {
                 const newExecStepsCount = await recipeExecutionStepsService.createExecSteps(objectRepository)(recipeId, recipeExecSteps);
@@ -45,22 +42,20 @@ class RecipeExecutionStepsController {
     }
     // update execution step
     modifyExecSteps(objectRepository) {
-        const { recipeExecutionStepsService, inputValidator } = objectRepository;
+        const { recipeExecutionStepsService, inputValidator, executionStepSchema } = objectRepository;
         return async (req, res) => {
-            const { isUndefined, isNumber } = inputValidator;
+            const { isUndefined } = inputValidator;
             const { recipeId, execStepId } = req.params;
-            const { newStepNum, newDesc } = req.body ?? {};
+            const { stepNum, description } = req.body ?? {};
 
-            if (isUndefined(recipeId) || isUndefined(execStepId) || isUndefined(newStepNum) || isUndefined(newDesc))
+            if (isUndefined(recipeId) || isUndefined(execStepId))
                 return res.status(400).json({ message: "Invalid Request!" });
 
-            if (!isNumber(newStepNum))
-                return res.status(400).json({ message: "'newQuantity' should be of type number!" });
-
-            // TODO: check if typeof newDesc === "string"
+            const { error } = executionStepSchema.validate([{ stepNum, description }]);
+            if (error) return res.status(422).json({ message: error.message });
 
             try {
-                const updatedExecStepCount = await recipeExecutionStepsService.modifyExecStep(objectRepository)(recipeId, execStepId, newStepNum, newDesc);
+                const updatedExecStepCount = await recipeExecutionStepsService.modifyExecStep(objectRepository)(recipeId, execStepId, stepNum, description);
                 return res.status(200).json({ message: `Updated ${updatedExecStepCount} Rows!` });
             } catch (err) {
                 return res.status(400).json({ message: err.message });
@@ -79,7 +74,7 @@ class RecipeExecutionStepsController {
 
             try {
                 const removedExecStepNum = await recipeExecutionStepsService.removeExecStep(objectRepository)(recipeId, execStepId);
-                return res.status(200).json({ message: `Step #${removedExecStepNum} were deleted!` });
+                return res.status(200).json({ message: `Step #${removedExecStepNum} was deleted!` });
             } catch (err) {
                 return res.status(400).json({ message: err.message });
             }

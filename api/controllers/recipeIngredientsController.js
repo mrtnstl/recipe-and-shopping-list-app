@@ -1,7 +1,7 @@
 class RecipeIngredientsController {
     // add new ingredient to recipe
     addRecipeIngredient(objectRepository) {
-        const { recipeIngredientsService, inputValidator, inputSanitizer } = objectRepository;
+        const { recipeIngredientsService, inputValidator, inputSanitizer, recipeIngredientSchema } = objectRepository;
         return async (req, res) => {
             const { isUndefined, isArrayAndIsLength } = inputValidator;
             const { trimString, escape, stripLow } = inputSanitizer; // TODO: 
