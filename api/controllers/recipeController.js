@@ -2,12 +2,15 @@ class RecipeController {
     getRecipes(objectRepository) {
         const { recipeService } = objectRepository;
         return async (req, res, next) => {
-            const { limit } = req.query;
 
-            let validatedLimit = typeof limit === "undefined" ? 6 : limit;
+            const limit = parseInt(req.query.limit);
+            const page = parseInt(req.query.page);
+
+            if (Number.isNaN(limit) || Number.isNaN(page)) return res.status(400).json({ message: "Malformed request!" });
+            if (limit < 0 || limit > 20) return res.status(400).json({ message: "Limit is out of range!" });
 
             try {
-                const recipes = await recipeService.getRecipes(objectRepository)(validatedLimit);
+                const recipes = await recipeService.getRecipes(objectRepository)(limit, page);
                 return res.status(200).json(recipes);
             } catch (err) {
                 const statusCode = err.statusCode || 400;
@@ -20,7 +23,7 @@ class RecipeController {
         return async (req, res, next) => {
             try {
                 const recipeCount = await recipeService.getRecipeCount(objectRepository)();
-                return res.status(200).json({ recipe_count: recipeCount });
+                return res.status(200).json({ recipe_count: recipeCount }); // TODO: camelCase the key
             } catch (err) {
                 const statusCode = err.statusCode || 400;
                 return res.status(statusCode).json({ message: err.message });

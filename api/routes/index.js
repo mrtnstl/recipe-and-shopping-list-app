@@ -1,34 +1,43 @@
 // imports for DI
+
 // third party packages
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import Joi from "joi";
-// services and repositorys/models
+
+// services
 import recipeService from "../services/recipeService.js";
 import ingredientService from "../services/ingredientService.js";
 import recipeIngredientsService from "../services/recipeIngredientsService.js";
 import recipeExecutionStepsService from "../services/recipeExecutionStepsService.js";
 import authService from "../services/authService.js";
 import userService from "../services/userService.js";
+
+// repositorys/models
 import Users from "../repositories/userRepository.js";
 import Recipes from "../repositories/recipeRepository.js";
 import Ingredients from "../repositories/ingredientRepository.js";
 import RecipeIngredients from "../repositories/recipeIngredientsRepository.js";
 import ExecutionSteps from "../repositories/recipeExecutionStepsRepository.js";
+
 // middleware
 import { verify } from "../middlewares/authMW.js";
+
 // cache storage
 import * as Cache from "../services/cache/mockCacheStore.js";
+
 // helpers
 import authHelpers from "../utils/authHelpers.js";
 import userHelpers from "../utils/userHelpers.js";
 import ingredientHelpers from "../utils/ingredientHelpers.js";
 import ErrorClasses from "../utils/ErrorClasses.js";
 import { InputValidator, InputSanitizer } from "../utils/validator.js";
+
 // validation schemas
 import { userSchema, authSchema } from "../schema/userSchema.js";
 import { recipeSchema, recipeIngredientSchema, executionStepSchema } from "../schema/recipeSchema.js";
 import { ingredientSchema } from "../schema/ingredientSchema.js";
+
 // route initiator functions
 import { initAuthRouter } from "./domain/authRoutes.js";
 import { initUserRouter } from "./domain/userRoutes.js";
@@ -63,6 +72,7 @@ export default function initRoutes(app, pool) {
     const homePageRouter = initHomePageRouter(objectRepository);
     const chefsPageRouter = initChefsPageRouter(objectRepository);
 
+    // api routes
     app.use("/api", authRouter);
     app.use("/api", userRouter);
     app.use("/api", recipeRouter);
@@ -70,6 +80,7 @@ export default function initRoutes(app, pool) {
     app.use("/api", recipeIngredientsRouter);
     app.use("/api", recipeExecutionStepsRouter);
 
+    // backend for frontend routes
     app.use("/homepage", homePageRouter);
     app.use("/chef", chefsPageRouter);
 

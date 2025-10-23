@@ -12,9 +12,9 @@ const Recipes = {
     },
     find: (objectRepository) => {
         const { pool } = objectRepository;
-        return async (limit) => {
+        return async (limit, offset) => {
             try {
-                const { rows } = await pool.query("SELECT * FROM recipes ORDER BY created_at DESC LIMIT $1 OFFSET 0;", [limit]);
+                const { rows } = await pool.query("SELECT * FROM recipes ORDER BY created_at DESC LIMIT $1 OFFSET $2;", [limit, offset]);
                 return rows;
             } catch (err) {
                 throw new Error(err.message);
@@ -25,8 +25,8 @@ const Recipes = {
         const { pool } = objectRepository;
         return async () => {
             try {
-                const recipeCount = await pool.query("SELECT COUNT(*) FROM recipes;");
-                return recipeCount.rows[0].count;
+                const recipeCount = await pool.query("SELECT COUNT(*) FROM recipes;"); // returning count?????
+                return recipeCount;
             } catch (err) {
                 throw new Error(err.message);
             }

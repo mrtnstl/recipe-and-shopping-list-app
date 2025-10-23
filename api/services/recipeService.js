@@ -1,9 +1,19 @@
 class RecipeService {
     getRecipes(objectRepository) {
         const { Recipes } = objectRepository;
-        return async (limit) => {
-            const recipes = await Recipes.find(objectRepository)(limit);
-            return recipes;
+        return async (limit, page) => {
+
+            const recipeCount = await Recipes.count(objectRepository)(); // TODO: check cache
+            const pageCount = Math.ceil(recipeCount.rows[0].count / limit);
+
+            if (page < 1 || page > pageCount) throw new Error("Page is out of range!");
+
+            const offset = (page - 1) * limit;
+
+            const recipes = await Recipes.find(objectRepository)(limit, offset);
+            if (!recipes) throw new Error("Not Found!");
+
+            return { recipes, recipeCount: recipeCount.rows[0].count, page, pageCount };
         }
     }
     getRecipeCount(objectRepository) {
