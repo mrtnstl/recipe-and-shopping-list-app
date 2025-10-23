@@ -9,7 +9,7 @@ export function initRecipeIngredientsRouter(objectRepository) {
         addRecipeIngredient(objectRepository));
     recipeIngredientsRouter.get("/recipe-ingredients/:recipeId",
         getRecipeIngredient(objectRepository));
-    recipeIngredientsRouter.put("/recipe-ingredients/:recipeId", // /:ingredientId
+    recipeIngredientsRouter.put("/recipe-ingredients/:recipeId/:ingredientId",
         /* TODO: check permissions */
         modifyRecipeIngredient(objectRepository));
     recipeIngredientsRouter.delete("/recipe-ingredients/:recipeId/:ingredientId",

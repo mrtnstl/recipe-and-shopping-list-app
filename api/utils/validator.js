@@ -17,6 +17,10 @@ class InputValidator {
         if (typeof input !== "number" || typeof gt !== "number" || typeof lt !== "number") return false;
         return Number.isInteger(input) && (input > gt && input < lt);
     }
+    NumberInRange(input, { gt = -Infinity, lt = Infinity } = {}) {
+        if (typeof input !== "number" || typeof gt !== "number" || typeof lt !== "number") return false;
+        return input > gt && input < lt;
+    }
     isArrayAndIsLength(input, { min = -1, max = Infinity } = {}) {
         return Array.isArray(input) && (input.length >= min && input.length <= max);
     }

@@ -3,24 +3,22 @@ class RecipeIngredientsController {
     addRecipeIngredient(objectRepository) {
         const { recipeIngredientsService, inputValidator, inputSanitizer, recipeIngredientSchema } = objectRepository;
         return async (req, res) => {
-            const { isUndefined, isArrayAndIsLength } = inputValidator;
+            const { isUndefined } = inputValidator;
             const { trimString, escape, stripLow } = inputSanitizer; // TODO: 
 
             const { recipeId } = req.params;
             const { recipeIngredients } = req.body ?? {};
 
-            if (isUndefined(recipeId) || isUndefined(recipeIngredients))
+            if (isUndefined(recipeId))
                 return res.status(400).json({ message: "Invalid Request!" });
 
-            if (!isArrayAndIsLength(recipeIngredients, { max: 50 }))
-                return res.status(400).json({ message: "'recipeIngredients' should be an array containing 50 items maximum!" });
-
-            if (!isArrayAndIsLength(recipeIngredients, { min: 1 }))
-                return res.status(400).json({ message: "'recipeIngredients' should be an array containing 1 item minimum!" });
+            const { error } = recipeIngredientSchema.validate(recipeIngredients);
+            if (error)
+                return res.status(422).json({ message: error.message });
 
             try {
                 const newRecipesCount = await recipeIngredientsService.createRecipeIngredients(objectRepository)(recipeId, recipeIngredients);
-                return res.status(200).json({ message: `${newRecipesCount} recipe(s) added` });
+                return res.status(201).json({ message: `${newRecipesCount} recipe(s) added` });
             } catch (err) {
                 return res.status(400).json({ message: err.message });
             }
@@ -47,7 +45,7 @@ class RecipeIngredientsController {
     modifyRecipeIngredient(objectRepository) {
         const { recipeIngredientsService, inputValidator } = objectRepository;
         return async (req, res) => {
-            const { isUndefined, isNumber } = inputValidator;
+            const { isUndefined, isNumber, NumberInRange } = inputValidator;
             const { recipeId, ingredientId } = req.params;
             const { newQuantity } = req.body ?? {};
 
@@ -55,7 +53,10 @@ class RecipeIngredientsController {
                 return res.status(400).json({ message: "Invalid Request!" });
 
             if (!isNumber(newQuantity))
-                return res.status(400).json({ message: "'newQuantity' should be of type number!" });
+                return res.status(400).json({ message: "Invalid Input!" });
+
+            if (!NumberInRange(newQuantity, { gt: 0, lt: 32760 }))
+                return res.status(422).json({ message: "Quantity should be between 1 and 32760" });
 
             try {
                 const updatedRecipeCount = await recipeIngredientsService.modifyRecipeIngredient(objectRepository)(recipeId, ingredientId, newQuantity);

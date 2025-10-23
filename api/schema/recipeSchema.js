@@ -27,14 +27,12 @@ export const recipeSchema = Joi.object({
 });
 export const recipeIngredientSchema = Joi.array().min(1).max(50).items(
     Joi.object({
-        recipeId: Joi.string().required(),
         ingredientId: Joi.string().required(),
         quantity: Joi.number().min(REC_ING_QUANT_MIN).max(REC_ING_QUANT_MAX).required()
     })
 );
 export const executionStepSchema = Joi.array().min(EXEC_STEP_ARRAY_MIN_L).max(EXEC_STEP_ARRAY_MAX_L).items(
     Joi.object({
-        // recipeId: Joi.string().required(),
         stepNum: Joi.number().min(EXEC_STEP_NUM_MIN).max(EXEC_STEP_NUM_MAX).required(),
         description: Joi.string().min(EXEC_STEP_DESC_MIN).max(EXEC_STEP_DESC_MAX).required()
     })

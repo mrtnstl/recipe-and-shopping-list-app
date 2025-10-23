@@ -7,10 +7,6 @@ export function initRecipeExecutionStepsRouter(objectRepository) {
 
     recipeExecutionStepsRouter.post("/exec-steps/:recipeId",
         /* TODO: check permissions */
-        (req, res, next) => {
-            console.log(JSON.stringify(req.body))
-            next();
-        },
         addExecSteps(objectRepository));
     recipeExecutionStepsRouter.get("/exec-steps/:recipeId",
         getExecSteps(objectRepository));
