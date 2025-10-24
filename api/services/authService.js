@@ -2,15 +2,14 @@ const authService = {
     authenticateUser: (objectRepository) => {
         const { Users, bcrypt } = objectRepository;
         return async (userEmail, password) => {
-            console.log("authService:", userEmail, password);
+
             const user = await Users.getUserByEmail(objectRepository)(userEmail);
             if (!user) return null;
 
-            console.log("authService:", userEmail, password);
             const pwCheck = await bcrypt.compare(password, user.pw_hash);
             if (!pwCheck) return null;
 
-            console.log("authService:", userEmail, password);
+            // TODO: this method should handle token generation(currently in controller)
             return user;
         }
     },

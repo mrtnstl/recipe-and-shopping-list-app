@@ -85,10 +85,15 @@ export default function initRoutes(app, pool) {
     app.use("/chef", chefsPageRouter);
 
     // TODO: add express error mw
-
+    app.use((err, req, res) => {
+        console.log("GENERAL ERR HANDLER:", err) // TESTING ONLY
+        console.log("GENERAL ERR HANDLER(err name property):", err.name) // TESTING ONLY
+        // TODO: handle general errors here (json parsing errors, etc.)
+        return res.status(400).json({ message: "An Error Occurred! Try Again Later!" });
+    })
     // wildcard route
     app.use((req, res) => {
-        return res.status(404).json({ message: "Not Found!" });
+        return res.status(404).json({ message: "404! Resource Not Found!" });
     });
 }
 

@@ -33,15 +33,15 @@ const HomePage = () => {
     const fetchTopRecipes = useCallback(async () => {
         try {
             const apiUrl = import.meta.env.VITE_BACKEND_API_URL;
-            const topRecipesFetch = await fetch(`${apiUrl}/api/recipe?limit=6`, {
+            const topRecipesFetch = await fetch(`${apiUrl}/api/recipe?limit=8&page=1`, {
                 mode: "cors",
                 headers: { "Content-Type": "application/json" }
             });
             if (!topRecipesFetch.ok) { return console.log("fetch response err") }
-            const result = await topRecipesFetch.json();
+            const { recipes } = await topRecipesFetch.json();
 
-            setTopRecipes(result);
-            return result;
+            setTopRecipes(recipes);
+            return recipes;
         } catch (err) {
             console.log(err)
         }
@@ -64,7 +64,7 @@ const HomePage = () => {
                 </div>
             </section>
             <section className='my-5'>
-                <h2 className='mx-3 font-bold text-lg'>Latest 6 out of {recipeCount} Dishes</h2>
+                <h2 className='mx-3 font-bold text-lg'>Latest 8 out of {recipeCount} Dishes</h2>
                 <div className='mx-1 justify-center grid grid-rows-6 sm:grid-rows-3 sm:grid-cols-2 gap-x-2 gap-y-2'>
                     {topRecipes.length > 0 && topRecipes.map(recipe => (
                         <RecipeCard key={recipe.id} id={recipe.id} title={recipe.title}

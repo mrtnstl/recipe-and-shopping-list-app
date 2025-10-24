@@ -20,7 +20,7 @@ class RecipeService {
         const { Recipes } = objectRepository;
         return async () => {
             const recipeCount = await Recipes.count(objectRepository)();
-            return recipeCount;
+            return recipeCount.rows[0].count;
         }
     }
     searchRecipe(objectRepository) {

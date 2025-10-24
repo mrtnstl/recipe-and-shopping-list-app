@@ -1,6 +1,6 @@
 const userController = {
     register: (objectRepository) => {
-        const { userService } = objectRepository;
+        const { userService, userSchema } = objectRepository;
         return async (req, res, next) => {
             const { userName, userEmail, password, userSex } = req.body;
 
@@ -9,6 +9,9 @@ const userController = {
                 typeof password === "undefined" ||
                 typeof userSex === "undefined")
                 return res.status(400).json({ message: "Missing parameter(s)!" });
+
+            const { error } = userSchema.validate({ userName, userEmail, password, userSex });
+            if (error) return res.status(422).json({ message: error.message });
 
             try {
                 const newUser = await userService.createUser(objectRepository)(userName, userEmail, password, userSex);
