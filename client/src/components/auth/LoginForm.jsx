@@ -9,7 +9,7 @@ const LoginForm = () => {
     const [loginData, setLoginData] = useState({ userEmail: "", userPassword: "" });
     const [error, setError] = useState(false);
 
-    if (user) return navigate("/");
+    if (user) return navigate("/"); // TODO: check on this
 
     const handleSubmit = async (event) => {
         event.preventDefault();

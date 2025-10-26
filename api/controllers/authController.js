@@ -1,7 +1,8 @@
-const authController = {
-    login: (objectRepository) => {
+class authController {
+    login(objectRepository) {
         const { Cache, authService, authSchema } = objectRepository;
         return async (req, res, next) => {
+
             const { userEmail, password } = req.body ?? {};
             /* TEST USER
                 "userEmail": "bowsrthelizard@mail.com",
@@ -16,46 +17,75 @@ const authController = {
 
             try {
                 const user = await authService.authenticateUser(objectRepository)(userEmail, password);
-                if (!user) return res.status(400).json({ message: "Invalid login credentials!" });
+                if (!user) return res.status(401).json({ message: "Invalid login credentials!" }); // TODO: custom error Invalid Credentials
 
                 const accessToken = await authService.getAccessToken(objectRepository)(user);
                 const refreshToken = await authService.getRefreshToken(objectRepository)(user);
+
                 Cache.set(refreshToken); // TODO: change MockCache to Redis
 
-                return res.status(200).json({ userEmail: user.name, isAdmin: user.isAdmin, accessToken, refreshToken });
+                res.cookie("refreshToken", refreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "prod",
+                    sameSite: process.env.NODE_ENV === "prod" ? "none" : "lax",
+                    maxAge: 1000 * 60 * 60 * 24 * 7
+                });
+
+                return res.status(200).json({ userEmail: user.name, isAdmin: user.isAdmin, accessToken });
             } catch (err) {
                 const statusCode = err.statusCode || 400;
                 return res.status(statusCode).json({ message: err.message });
             }
         }
-    },
-    logout: (objectRepository) => {
+    }
+    logout(objectRepository) {
         const { authService } = objectRepository;
         return async (req, res, next) => {
-            const refreshToken = req.body.token ?? undefined;
-            if (typeof refreshToken === "undefined") return res.status(400).json({ message: "Missing refresh token!" });
+
+            const { refreshToken } = req.cookies ?? "";
+            if (typeof refreshToken === "undefined") return res.status(400).json({ message: "Missing refresh token!" }); // TODO: consider 401
 
             const destroyToken = await authService.destroyRefreshToken(objectRepository)(refreshToken);
             if (!destroyToken) return res.status(400).json({ message: "Failed to log out!" });
 
-            return res.status(200).json({ message: "Logged out!" });
+            res.clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "prod",
+                sameSite: process.env.NODE_ENV === "prod" ? "none" : "lax",
+            });
+
+            return res.status(204);
         }
-    },
-    refresh: (objectRepository) => {
-        const { Cache, authService } = objectRepository;
+    }
+    refresh(objectRepository) {
+        const { Cache, authService, jwt } = objectRepository;
         return async (req, res, next) => {
-            const refreshToken = req.body.token ?? undefined;
+
+            const { refreshToken } = req.cookies;
             if (!refreshToken) return res.status(401).json({ message: "You aren't authenticated!" });
+
             if (!Cache.get(refreshToken)) return res.status(403).json({ message: "Invalid refresh token!" }); // TODO: change MockCache to Redis
 
             try {
+                jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET, async (err, payload) => {
+                    if (err) return res.status(401).json({ message: "Invalid token!" }); // TODO: 403 error instead???
+                });
+
                 const { newAccessToken, newRefreshToken } = await authService.refreshExpiringTokens(objectRepository)(refreshToken);
-                return res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+
+                res.cookie("refreshToken", newRefreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "prod",
+                    sameSite: process.env.NODE_ENV === "prod" ? "none" : "lax",
+                    maxAge: 1000 * 60 * 60 * 24 * 7
+                });
+
+                return res.status(200).json({ accessToken: newAccessToken });
             } catch (err) {
                 const statusCode = err.statusCode || 400; // TODO: custom errors yet to be implemented
                 return res.status(statusCode).json({ message: err.message });
             }
         }
-    },
+    }
 }
-export default authController;
+export default new authController();

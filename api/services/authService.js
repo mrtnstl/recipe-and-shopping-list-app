@@ -37,13 +37,13 @@ const authService = {
     refreshExpiringTokens: (objectRepository) => {
         const { Cache, authHelpers, jwt } = objectRepository;
         return async (refreshToken) => {
-            const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
-            Cache.destroy(refreshToken); // TODO: change MockCache to Redis
+            const payload = await jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
 
             const newAccessToken = authHelpers.generateAccessToken(payload);
             const newRefreshToken = authHelpers.generateRefreshToken(payload);
 
             Cache.set(newRefreshToken); // TODO: change MockCache to Redis
+            Cache.destroy(refreshToken); // TODO: change MockCache to Redis
 
             return ({ newAccessToken, newRefreshToken });
         }

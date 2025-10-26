@@ -1,12 +1,12 @@
-async function refreshAccessToken(refreshToken) {
+async function refreshAccessToken() {
     try {
         const refreshPromise = await fetch("http://localhost:5000/api/refresh", {
             method: "POST",
             mode: "cors",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ token: refreshToken })
         })
 
         if (!refreshPromise.ok) throw new Error("Refresh failed");
@@ -18,7 +18,7 @@ async function refreshAccessToken(refreshToken) {
 }
 
 export async function fetchWithRetry(input, init = {}, oldData, setUser) {
-    const { accessToken, refreshToken } = oldData;
+    const { accessToken } = oldData;
 
     try {
         let response = await fetch(input, {
@@ -32,10 +32,10 @@ export async function fetchWithRetry(input, init = {}, oldData, setUser) {
         if (response.status !== 401) return response; // WARN: changed backend res code to 401, had to be reflected here
 
         // Token lejárt, próbáljuk frissíteni
-        const newTokens = await refreshAccessToken(refreshToken);
+        const newTokens = await refreshAccessToken();
 
         // TODO: talán ellenőrizni newTokens-t?
-        setUser({ ...oldData, accessToken: newTokens.accessToken, refreshToken: newTokens.refreshToken });
+        setUser({ ...oldData, accessToken: newTokens.accessToken });
 
         return await fetch(input, {
             ...init,

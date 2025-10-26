@@ -21,6 +21,10 @@ import ForgotPasswordLayout from './layout/ForgotPasswordLayout.jsx';
 import ForgotPasswordForm from './components/password/ForgotPasswordForm.jsx';
 import SetNewPasswordForm from './components/password/SetNewPasswordForm.jsx';
 
+import { useAuth } from './contexts/AuthContext.jsx';
+import { useEffect } from 'react';
+import { refresh } from './services/auth.js';
+
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -46,6 +50,19 @@ function App() {
 
       </Route>
     ));
+
+  const { setUser } = useAuth();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await refresh();
+        setUser(...userData, accessToken = res.accessToken);
+      } catch (err) {
+        console.log(err)
+      }
+    })();
+  }, [setUser]);
 
   return (
     <RouterProvider router={router} />
